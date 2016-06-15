@@ -1,7 +1,7 @@
 
 describe('FLAP E2E Tests', function () {
 
-	var expectedMsg = '';
+	var expectedMsg = 'FLAP клиент';
 
 
   beforeEach(function () {
