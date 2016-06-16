@@ -13,8 +13,6 @@ export class ConfigService {
   }
   private extractData(res: Response) {
     let body = res.json();
-    //console.log(body.data);
-    //return body.data || { };
     return body;
   }
   private handleError (error: any) {
