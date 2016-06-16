@@ -2,15 +2,15 @@ import { Component } from '@angular/core';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
 
 import { AboutComponent }     from './about/about.component';
+import { NavigationComponent }     from './navigation/navigation.component';
 
 
 @Component({
     selector: 'flap',
-    template: `<h1>{{title}}</h1>
-        <router-outlet></router-outlet>
-    `,
+    templateUrl: 'app/app.component.html', 
     directives: [
-    	ROUTER_DIRECTIVES
+    	ROUTER_DIRECTIVES,
+        NavigationComponent
     ],
   	providers: [
 	    ROUTER_PROVIDERS,

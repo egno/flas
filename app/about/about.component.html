@@ -1,6 +1,22 @@
 <div>
 	<div>{{config.description}} </div>
 	<div>ver. {{config.version}} </div>
-	<div>License: {{config.license}} </div>
-	<div>&copy; {{config.author}} {{config.license_year}} 
+	<div>License: <a href="{{config.license_url}}">{{config.license}}</a></div>
+	<div>&copy; {{config.license_year}} {{config.author}}</div>
+	<div>Visit <a href="{{config.project_page}}">FLAP project page</a></div>
+</div>
+<div>
+	<h4>Server settings</h4>
+	<div *ngIf="errorMessage">
+		<div>No connection to server</div>
+		<div>{{errorMessage}}</div>
+	</div>
+	<ul>
+		  <li *ngFor="let item of settings">
+		    <span>
+		      <span>{{item.name}}:</span> {{item.value}}
+		    </span>
+		  </li>
+	</ul>
+
 </div>
