@@ -12,29 +12,30 @@ import { ConfigService }     from '../config/config.service';
 })
 
 export class AboutComponent implements OnInit {
-  config: any;
-	version: string;
+  config: any = {};
+	version: string = '0';
   errorMessage: string;
-    constructor(private http: Http
-      //private configService: ConfigService 
+    constructor(private http: Http,
+      private configService: ConfigService 
       ) { } 
 
     ngOnInit() {
+      this.getConfig();
+    }
+
+    getVersion() {
         this.http.get('../../package.json')
             .map(res => res.json())
             .subscribe((data) => {this.version=data.version},
             err=>console.log(err),
             ()=>console.log('version: ', this.version));
-        
-       // this.config = this.configService
-        //  .getConfig()
-        //  .subscribe(
-        //    data => {console.log(data)},            error => this.errorMessage = <any>error
-        //    );
-  
     }
 
-    getVersion() {
-    	return this.version;
+    getConfig() {
+      this.configService.getConfig()
+          .subscribe(
+            data => {this.config = data; console.log(data); console.log(this.config.version)},            
+            error => {this.errorMessage = <any>error; console.log(error)}
+            );
     }
 }

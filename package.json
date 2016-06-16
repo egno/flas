@@ -1,6 +1,6 @@
 {
   "name": "flap",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "FLAP client",
   "scripts": {
     "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",

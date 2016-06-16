@@ -6,15 +6,16 @@ import { Observable }     from 'rxjs/Observable';
 export class ConfigService {
   constructor (private http: Http) {  }
   private configUrl = '../../package.json';  // URL to web API
-  getConfig (): Observable<string> {
+  getConfig (): Observable<any> {
     return this.http.get(this.configUrl)
                     .map(this.extractData)
                     .catch(this.handleError);
   }
   private extractData(res: Response) {
     let body = res.json();
-    console.log(body);
-    return body.data || { };
+    //console.log(body.data);
+    //return body.data || { };
+    return body;
   }
   private handleError (error: any) {
     // In a real world app, we might use a remote logging infrastructure
