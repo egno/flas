@@ -12,7 +12,7 @@ import { RestService }     from '../rest/rest.service';
 export class TestComponent implements OnInit {
   config: any = {};
   settings: Array<any> = [];
-  errorMessage;
+  errorMessage: any ;
 
   constructor(private restService: RestService) { }
 
