@@ -5,17 +5,17 @@
 #
 FROM node:latest
 
-RUN mkdir -p /flapclient /home/nodejs && \
+RUN mkdir -p /quickstart /home/nodejs && \
     groupadd -r nodejs && \
     useradd -r -g nodejs -d /home/nodejs -s /sbin/nologin nodejs && \
     chown -R nodejs:nodejs /home/nodejs
 
-WORKDIR /flapclient
-COPY package.json typings.json /flapclient/
+WORKDIR /quickstart
+COPY package.json typings.json /quickstart/
 RUN npm install --unsafe-perm=true
 
-COPY . /flapclient
-RUN chown -R nodejs:nodejs /flapclient
+COPY . /quickstart
+RUN chown -R nodejs:nodejs /quickstart
 USER nodejs
 
 CMD npm start
