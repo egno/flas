@@ -3,12 +3,15 @@
 		<h1>{{title}}</h1>
 	</div>
 	<div class="row">
-		<div class="col-xs-12 col-sm-3 col-md-2 col-lg-1 navbar-default sidebar sidebar-nav navbar-collapse">
-			<nav>
-		      <a *ngFor="let route of lroutes" [routerLink]="['/'+route.path]">{{route.name}}</a>
-		    </nav>
-		</div>
-		<div class="col-xs-12 col-sm-9 col-md-10 col-lg-11">
+
+			<div class="col-sm-2" id="MainMenu">
+				  <nav class="list-group panel">
+				    <a class="list-group-item" [routerLink]="['/test']">Test</a>
+				    <a class="list-group-item" [routerLink]="['/test1']">1</a>
+				  </nav>
+			</div>
+
+		<div class="col-sm-10">
 			<router-outlet></router-outlet>
 		</div>
 	</div>

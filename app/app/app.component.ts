@@ -1,15 +1,18 @@
 import { Component }	from '@angular/core';
-import { ROUTER_DIRECTIVES }  from '@angular/router';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
-import {routes} from '../app/app.routes';
+import {AppNav} from '../navigation/navigation.component';
+
 
 @Component({
     selector: 'flap',
     templateUrl: 'app/app/app.component.html', 
-    directives: [ROUTER_DIRECTIVES],
+    directives: [AppNav, ROUTER_DIRECTIVES],
 })
+
 
 export class AppComponent { 
 	title = 'FLAP';
-	lroutes=routes;
+  appRoutes: string[][];
+
 }
