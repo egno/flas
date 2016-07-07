@@ -13,6 +13,4 @@ import {AppNav} from '../navigation/navigation.component';
 
 export class AppComponent { 
 	title = 'FLAP';
-  appRoutes: string[][];
-
 }

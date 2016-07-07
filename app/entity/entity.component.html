@@ -1,0 +1,27 @@
+<div>
+	<h3>Entity: {{mode}}</h3>
+	<div >
+		<table *ngIf="item" class="table table-bordered">
+			<thead>
+				<tr>
+					<th>
+						name
+					</th>
+					<th>
+						value
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let h of headers">
+					<td>
+						{{h.name}}
+					</td>
+					<th>
+						{{item[h.name]}}
+					</th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

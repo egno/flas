@@ -1,12 +1,15 @@
 import { provideRouter, RouterConfig }  from '@angular/router';
 
 import { TestComponent }  from '../test/test.component';
-import { Test1Component }  from '../test1/test1.component';
+import { ListpageComponent }  from '../listpage/listpage.component';
+import { EntityComponent }  from '../entity/entity.component';
 
 export const routes: RouterConfig = [
-  { path: '', redirectTo: 'test1' },
-  { path: 'test', component: TestComponent },
-  { path: 'test1', component: Test1Component},
+  { path: '', redirectTo: 'about' },
+  { path: 'about', component: TestComponent },
+  { path: 'l', component: ListpageComponent},
+  { path: 'l/:mode', component: ListpageComponent},
+  { path: 'l/:mode/:id', component: EntityComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

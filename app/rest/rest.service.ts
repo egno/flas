@@ -7,9 +7,17 @@ import 'rxjs/Rx';
 @Injectable()
 export class RestService {
   constructor (private http: Http) {  }
-  private configUrl = 'http://192.168.1.58:3100/';  // URL to web API
-  getRest (path: string): Promise<any> {
-    return this.http.get(this.configUrl+path)
+  private configUrl = '/api/v1/';  // URL to web API
+  getRest (path: string, id?: string): Promise<any> {
+    let parm: string = '';
+    if (id!==undefined) {parm='?uuid=eq.'+id};
+    return this.http.get(this.configUrl+path+parm)
+                    .toPromise()
+                    .then(this.extractData)
+                    .catch(this.handleError);
+  }
+  getRestHeaders (path: string): Promise<any> {
+    return this.http.request(this.configUrl+path, {method: 'Options'})
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);

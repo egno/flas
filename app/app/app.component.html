@@ -1,14 +1,19 @@
 <div class="container" ng-cloak>
  	<div class="row">
-		<h1>{{title}}</h1>
+			<div class="col-sm-12" id="Header">
+				<h1>{{title}}</h1>
+			</div>
 	</div>
 	<div class="row">
 
 			<div class="col-sm-2" id="MainMenu">
 				  <nav class="list-group panel">
-				    <a class="list-group-item" [routerLink]="['/test']">Test</a>
-				    <a class="list-group-item" [routerLink]="['/test1']">1</a>
+				    <a class="list-group-item" [routerLink]="['/about']">About</a>
+				    <a class="list-group-item" [routerLink]="['/l','buildings']">Buildings</a>
+				    <a class="list-group-item" [routerLink]="['/l','buildings','b46088c3-6150-4dc0-8530-ee50651aacd1']">Building</a>
+				    <a class="list-group-item" [routerLink]="['/l','settings']">Settings</a>
 				  </nav>
+				{{APP_ROUTER_PROVIDERS}}
 			</div>
 
 		<div class="col-sm-10">
