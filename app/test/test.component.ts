@@ -23,7 +23,7 @@ export class TestComponent implements OnInit {
     getRest(path: string) {
       this.restService.getRest(path)
           .then(
-            data => {this.settings = data}           
+            d => {this.settings = d.data}           
             )
           .catch(message => {this.errorMessage = message});
     }    

@@ -8,13 +8,14 @@ import 'rxjs/Rx';
 export class RestService {
   constructor (private http: Http) {  }
   private configUrl = '/api/v1/';  // URL to web API
+
   getRest (path: string, id?: string): Promise<any> {
     let headers = new Headers();
     headers.append('Range-Unit', 'items');
-    headers.append('Range', '0-10');
+    headers.append('Range', '0-9');
     let parm: string = '';
     if (id!==undefined) {parm='?uuid=eq.'+id};
-    return this.http.get(this.configUrl+path+parm)
+    return this.http.get(this.configUrl+path+parm, {headers: headers})
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);
@@ -70,7 +71,16 @@ export class RestService {
   }
 
   private extractData(res: Response) {
-    return res.json();
+    let resultSet: any = {};
+    resultSet.totals = res.headers.get('Content-Range');
+    if (resultSet.totals) {
+       resultSet.total = +resultSet.totals.match(/[\d]+$/)[0];
+       resultSet.start = +resultSet.totals.match(/^[^-]+/)[0];
+       resultSet.end = +resultSet.totals.match(/(?:-)([\d]+)/)[1];
+     };
+    resultSet.data = res.json();
+//    console.log(resultSet);
+    return resultSet;
   }
 
   private handleError (error: any) {

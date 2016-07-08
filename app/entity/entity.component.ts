@@ -42,10 +42,14 @@ export class EntityComponent implements OnInit, OnDestroy {
 	this.sub.unsubscribe();
 	}
 
+  onGo(mode: string) {
+    this.router.navigate(['/l', mode]);
+  }
+
     getRest(path: string, id: string) {
       this.restService.getRest(path, id)
           .then(
-            d => {this.item = d[0]}           
+            d => {this.item = d.data[0]; console.log(this.item)}           
             )
           .catch(message => {this.errorMessage = message});
       
@@ -54,7 +58,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     getRestHeaders(path: string) {
       this.restService.getRestHeaders(path)
           .then(
-            d => {this.headers = d.columns}           
+            d => {this.headers = d.data.columns; console.log(this.headers)}           
             )
           .catch(message => {this.errorMessage = message});
       ;

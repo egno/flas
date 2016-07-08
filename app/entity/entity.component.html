@@ -1,5 +1,5 @@
 <div>
-	<h3>{{mode}}</h3>
+	<h3 (click)="onGo(mode)">{{mode}}</h3>
 	<div>
 			<button type="button" class="btn btn-default btn-xs" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">Edit</button>
 			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">Save</button>

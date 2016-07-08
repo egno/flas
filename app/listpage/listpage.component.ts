@@ -17,6 +17,11 @@ export class ListpageComponent implements OnInit, OnDestroy {
   	private sub: any;
 	errorMessage: any;
   selectedItem: any;
+  total: number;
+  start: number;
+  end: number;
+  page: number;
+  pages: number;
 
 	constructor(
 	    private route: ActivatedRoute,
@@ -53,6 +58,14 @@ export class ListpageComponent implements OnInit, OnDestroy {
     this.router.navigate(['/l', this.mode, item.uuid]);
   }
 
+  onNext(page: number = 0) {
+    this.getRest(this.mode);
+  }
+
+  onPrev(page: number = 0) {
+    this.getRest(this.mode);
+  }
+
   onDelete(item: any) {
     if (item.uuid !== undefined) {
       this.restService.delete(this.mode, item)
@@ -66,7 +79,14 @@ export class ListpageComponent implements OnInit, OnDestroy {
   getRest(path: string) {
       this.restService.getRest(path)
           .then(
-            d => {this.data = d}           
+            d => {
+                this.data = d.data; 
+                this.total=d.total; 
+                this.start=d.start; 
+                this.end=d.end; 
+                this.pages= ~~(this.total/ 10) + 1;
+                this.page= ~~(this.start/ 10) + 1;
+                console.log(this.data)}           
             )
           .catch(message => {this.errorMessage = message});
       ;
@@ -75,7 +95,7 @@ export class ListpageComponent implements OnInit, OnDestroy {
   getRestHeaders(path: string) {
       this.restService.getRestHeaders(path)
           .then(
-            d => {this.headers = d.columns}           
+            d => {this.headers = d.data.columns; console.log(this.headers)}           
             )
           .catch(message => {this.errorMessage = message});
       ;

@@ -6,6 +6,11 @@
 			<button type="button" class="btn btn-default btn-xs" [class.disabled]="!selectedItem" (click)="onDelete(selectedItem)">Del</button>
 			<button type="button" class="btn btn-default btn-xs" (click)="onAdd()">Add</button>
 	</div>
+	<div>
+		<div>Items:{{start}}-{{end}}/{{total}} Page:{{page}}/{{pages}}</div>
+		<div *ngIf="page > 1" (click)="onPrev(page)">Prev</div>
+		<div *ngIf="page < pages" (click)="onNext(page)">Next</div>
+	</div>
 	<div >
 		<table class="table table-striped table-condensed table-hover ">
 			<thead>
