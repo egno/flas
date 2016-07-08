@@ -5,11 +5,12 @@ import { ListpageComponent }  from '../listpage/listpage.component';
 import { EntityComponent }  from '../entity/entity.component';
 
 export const routes: RouterConfig = [
-  { path: '', redirectTo: 'about' },
+  { path: '', redirectTo: 'about', pathMatch: 'full' },
   { path: 'about', component: TestComponent },
-  { path: 'l', component: ListpageComponent},
+  { path: 'l', redirectTo: 'about', pathMatch: 'full'},
   { path: 'l/:mode', component: ListpageComponent},
   { path: 'l/:mode/:id', component: EntityComponent},
+  { path: 'l/:mode/:id/:edit', component: EntityComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

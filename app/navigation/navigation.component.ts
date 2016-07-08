@@ -11,7 +11,7 @@ import {TestComponent} from '../test/test.component';
   directives: [ROUTER_DIRECTIVES],
   template: `
     <nav>
-      <a *ngFor="#route of routes"
+      <a *ngFor="let route of routes"
         [routerLink]="route.path">
         {{route.name}}
       </a>

@@ -16,6 +16,7 @@ export class ListpageComponent implements OnInit, OnDestroy {
 	data: any[];
   	private sub: any;
 	errorMessage: any;
+  selectedItem: any;
 
 	constructor(
 	    private route: ActivatedRoute,
@@ -36,23 +37,47 @@ export class ListpageComponent implements OnInit, OnDestroy {
 	this.sub.unsubscribe();
 	}
 
-    getRest(path: string) {
+  onSelect(item: any) {
+    this.selectedItem = item;
+  }
+  
+  onAdd(item: any) {
+    this.router.navigate(['/l', this.mode, 0, 'new']);
+  }
+
+  onEdit(item: any) {
+    this.router.navigate(['/l', this.mode, item.uuid, 'e']);
+  }
+
+  onView(item: any) {
+    this.router.navigate(['/l', this.mode, item.uuid]);
+  }
+
+  onDelete(item: any) {
+    if (item.uuid !== undefined) {
+      this.restService.delete(this.mode, item)
+      .then(res => {
+          this.data = this.data.filter(i => i !== item);
+          if (this.selectedItem === item) { this.selectedItem = null; }
+        });
+    }
+  }
+
+  getRest(path: string) {
       this.restService.getRest(path)
           .then(
-            d => {this.data = d; console.log(this.data)}           
+            d => {this.data = d}           
             )
           .catch(message => {this.errorMessage = message});
       ;
     } 
 
-    getRestHeaders(path: string) {
+  getRestHeaders(path: string) {
       this.restService.getRestHeaders(path)
           .then(
-            d => {this.headers = d.columns; console.log(this.headers)}           
+            d => {this.headers = d.columns}           
             )
           .catch(message => {this.errorMessage = message});
       ;
     }    
-
-  }
 }

@@ -1,6 +1,11 @@
 <div>
-	<h3>Entity: {{mode}}</h3>
-	<div >
+	<h3>{{mode}}</h3>
+	<div>
+			<button type="button" class="btn btn-default btn-xs" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">Edit</button>
+			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">Save</button>
+			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode !== 'new'"[class.disabled]="!item" (click)="onDelete(item)">Del</button>
+	</div>
+	<div>
 		<table *ngIf="item" class="table table-bordered">
 			<thead>
 				<tr>
@@ -13,13 +18,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let h of headers">
+				<tr *ngFor="let h of headers" >
 					<td>
 						{{h.name}}
 					</td>
-					<th>
-						{{item[h.name]}}
-					</th>
+					<td >
+						<input *ngIf="editMode && h.name !== 'uuid'" [(ngModel)]="item[h.name]"/>
+						<div *ngIf="!editMode || h.name === 'uuid'">{{item[h.name]}}</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
