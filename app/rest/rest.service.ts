@@ -9,10 +9,21 @@ export class RestService {
   constructor (private http: Http) {  }
   private configUrl = '/api/v1/';  // URL to web API
 
+  get (path: string, page: number, count:number = 10): Promise<any> {
+    let headers = new Headers();
+    headers.append('Range-Unit', 'items');
+    headers.append('Range', `${(page-1) * count}-${page * count -1}`);
+    let parm: string = '';
+    return this.http.get(this.configUrl+path+parm, {headers: headers})
+                    .toPromise()
+                    .then(this.extractData)
+                    .catch(this.handleError);
+  }
+
   getRest (path: string, id?: string): Promise<any> {
     let headers = new Headers();
     headers.append('Range-Unit', 'items');
-    headers.append('Range', '0-9');
+    headers.append('Range', '0-0');
     let parm: string = '';
     if (id!==undefined) {parm='?uuid=eq.'+id};
     return this.http.get(this.configUrl+path+parm, {headers: headers})

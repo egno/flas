@@ -20,8 +20,9 @@ export class ListpageComponent implements OnInit, OnDestroy {
   total: number;
   start: number;
   end: number;
-  page: number;
-  pages: number;
+  page: number = 1;
+  pages: number = 1;
+  count: number = 10;
 
 	constructor(
 	    private route: ActivatedRoute,
@@ -32,7 +33,7 @@ export class ListpageComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 	this.sub = this.route.params.subscribe(params => {
 	   	this.mode = params['mode']; 
-	   	console.log(this.mode);
+//	   	console.log(this.mode);
    		this.getRestHeaders(this.mode);
    		this.getRest(this.mode);
 	 });
@@ -59,11 +60,19 @@ export class ListpageComponent implements OnInit, OnDestroy {
   }
 
   onNext(page: number = 0) {
-    this.getRest(this.mode);
+    this.getRest(this.mode, page+1);
   }
 
   onPrev(page: number = 0) {
-    this.getRest(this.mode);
+    this.getRest(this.mode, page-1);
+  }
+
+  onLast() {
+    this.getRest(this.mode, this.pages);
+  }
+
+  onFirst() {
+    this.getRest(this.mode, 1);
   }
 
   onDelete(item: any) {
@@ -76,26 +85,27 @@ export class ListpageComponent implements OnInit, OnDestroy {
     }
   }
 
-  getRest(path: string) {
-      this.restService.getRest(path)
+  getRest(path: string, page: number = 1) {
+      this.page = (page <1)? 1 : page;
+      this.page = (page > this.pages)? this.pages : page;
+      this.restService.get(path, this.page, this.count)
           .then(
             d => {
                 this.data = d.data; 
                 this.total=d.total; 
                 this.start=d.start; 
                 this.end=d.end; 
-                this.pages= ~~(this.total/ 10) + 1;
-                this.page= ~~(this.start/ 10) + 1;
-                console.log(this.data)}           
+                this.pages= ~~((this.total-1) / this.count) + 1;
+                }           
             )
-          .catch(message => {this.errorMessage = message});
+          .catch(message => {this.errorMessage = message; this.page=1; this.pages=1});
       ;
     } 
 
   getRestHeaders(path: string) {
       this.restService.getRestHeaders(path)
           .then(
-            d => {this.headers = d.data.columns; console.log(this.headers)}           
+            d => {this.headers = d.data.columns}           
             )
           .catch(message => {this.errorMessage = message});
       ;
