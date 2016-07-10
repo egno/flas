@@ -18,10 +18,10 @@ export class TestComponent implements OnInit {
 
     ngOnInit() {
     	this.config.version='0.0.2';
-    	this.getRest('settings');
+    	this.get('settings');
     }
-    getRest(path: string) {
-      this.restService.getRest(path)
+    get(path: string) {
+      this.restService.get(path)
           .then(
             d => {this.settings = d.data}           
             )

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute }       from '@angular/router';
+import { NgForm }    from '@angular/common';
 
 import { RestService }     from '../rest/rest.service';
 
@@ -15,9 +16,11 @@ export class EntityComponent implements OnInit, OnDestroy {
 	headers: any[];
   id: string;
 	item: any = {};
-  	private sub: any;
 	errorMessage: any;
   editMode: any;
+  select: Array<string> = [];
+  foreigners: any = {};
+    private sub: any;
 
 	constructor(
 	    private route: ActivatedRoute,
@@ -30,11 +33,8 @@ export class EntityComponent implements OnInit, OnDestroy {
 	   	this.mode = params['mode']; 
       this.id = params['id']; 
       this.editMode = params['edit']; 
-	   	console.log(this.mode, this.id, this.editMode);
-   		this.getRestHeaders(this.mode);
-      if (this.editMode !== 'new') {
-   		  this.getRest(this.mode, this.id);
-      };
+//	   	console.log(this.mode, this.id, this.editMode);
+   		this.getHeaders(this.mode);
 	 });
 	}
 
@@ -46,19 +46,65 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.router.navigate(['/l', mode]);
   }
 
-    getRest(path: string, id: string) {
-      this.restService.getRest(path, id)
+  getType(header: any) {
+    let res: string = 'text';
+//    console.log(header.type);
+    if (header.type === 'date') {res = 'date'}; 
+    if (header.type === 'numeric' || header.type === 'int') {res = 'number'}; 
+    return res;
+  }
+
+  checkSelect(){
+    this.select = this.headers.map(h => {return <string>
+      (h.references) ? `${h.name}{uuid,d}` : h.name;
+    });
+//    console.log(this.select);
+  }
+
+  getForeigners(){
+    let restParams: any = {};
+    restParams.select = 'uuid,d';
+    restParams.order = 'd,uuid';
+    this.headers.map(h => {
+      if (h.references) {
+ //       console.log('getForeigners: ', h.references.table, h.name, this.item);
+         this.restService.get(h.references.table, restParams)
+           .then(d=>{
+               let f: any = {};
+               f.list=d.data;
+               f.total=d.total;
+               this.foreigners[h.name]=f;
+               console.log(this.foreigners);
+             })
+           .catch(message => {this.errorMessage = message; console.log(this.errorMessage)})
+      }
+    });
+  } 
+
+    get(path: string, id: string) {
+      let restParams: any = {};
+      restParams.id = id;
+      restParams.select = this.select.toString();
+      return this.restService.get(path, restParams)
           .then(
-            d => {this.item = d.data[0]; console.log(this.item)}           
+            d => {this.item = d.data[0];
+                this.getForeigners();//; console.log(this.item)
+              }           
             )
           .catch(message => {this.errorMessage = message});
-      
-    } 
+     } 
 
-    getRestHeaders(path: string) {
-      this.restService.getRestHeaders(path)
+    getHeaders(path: string) {
+      this.restService.getHeaders(path)
           .then(
-            d => {this.headers = d.data.columns; console.log(this.headers)}           
+            d => {this.headers = d.data.columns; 
+                console.log(this.headers);
+                   if (this.editMode !== 'new') {
+                     this.headers = d.data.columns;
+                     this.checkSelect();
+                     this.get(this.mode, this.id);
+                   }
+              }           
             )
           .catch(message => {this.errorMessage = message});
       ;

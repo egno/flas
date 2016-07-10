@@ -18,14 +18,19 @@
 			<thead>
 				<tr>
 					<th *ngFor="let header of headers">
-						<div *ngIf="header.name !== 'uuid'">{{header.name}}</div>
+						<div *ngIf="header.name !== 'uuid'" (click)="onSort(header)">{{header.name}} 
+							<span><sup>{{getOrder(header)}}</sup></span>
+						</div>
 					</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr *ngFor="let item of data" (click)="onSelect(item)">
 					<td *ngFor="let h of headers" [class.info]="item === selectedItem">
-						<div *ngIf="h.name !== 'uuid'"> {{item[h.name]}}</div>
+						<div *ngIf="h.name !== 'uuid'">
+							<div *ngIf="!h.references"> {{item[h.name]}}</div>
+							<div *ngIf="h.references && item[h.name] !== null"> {{item[h.name].d}}</div>
+						</div>
 					</td>
 				</tr>
 			</tbody>

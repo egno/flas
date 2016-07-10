@@ -14,7 +14,6 @@ export class ListpageComponent implements OnInit, OnDestroy {
 	mode: string;
 	headers: any[];
 	data: any[];
-  	private sub: any;
 	errorMessage: any;
   selectedItem: any;
   total: number;
@@ -24,6 +23,9 @@ export class ListpageComponent implements OnInit, OnDestroy {
   pages: number = 1;
   count: number = 10;
   navpages: number[];
+  order: Array<string> = [];
+  select: Array<string> = [];
+  private sub: any;
 
 	constructor(
 	    private route: ActivatedRoute,
@@ -35,8 +37,7 @@ export class ListpageComponent implements OnInit, OnDestroy {
 	this.sub = this.route.params.subscribe(params => {
 	   	this.mode = params['mode']; 
 //	   	console.log(this.mode);
-   		this.getRestHeaders(this.mode);
-   		this.getRest(this.mode);
+   		this.getHeaders(this.mode);
 	 });
 	}
 
@@ -61,19 +62,35 @@ export class ListpageComponent implements OnInit, OnDestroy {
   }
 
   onNext(page: number = 0) {
-    this.getRest(this.mode, page+1);
+    this.page+=1;
+    this.get(this.mode);
   }
 
   onPrev(page: number = 0) {
-    this.getRest(this.mode, page-1);
+    this.page=1;
+    this.get(this.mode);
   }
 
   onLast() {
-    this.getRest(this.mode, this.pages);
+    this.page=this.pages;
+    this.get(this.mode);
   }
 
   onFirst() {
-    this.getRest(this.mode, 1);
+    this.page=1;
+    this.get(this.mode);
+  }
+
+  onSort(header: any) {
+    this.order = this.order.filter(i => i !== header.name);
+    this.order.unshift(header.name);
+//    console.log(this.order);
+    this.get(this.mode);
+  }
+
+  getOrder(header: any) {
+    let res = this.order.findIndex(i => i === header.name);
+    if (res >= 0) {return res+1};
   }
 
   onDelete(item: any) {
@@ -86,10 +103,26 @@ export class ListpageComponent implements OnInit, OnDestroy {
     }
   }
 
-  getRest(path: string, page: number = 1) {
-      this.page = (page <1)? 1 : page;
-      this.page = (page > this.pages)? this.pages : page;
-      this.restService.get(path, this.page, this.count)
+  checkSort(header: any){
+    return this.order.find(i => i === header.name);
+  }
+
+  checkSelect(){
+    this.select = this.headers.map(i => {return <string>
+      (i.references) ? `${i.name}{uuid,d}` : i.name;
+    });
+    console.log(this.select);
+  }
+
+  get(path: string) {
+      let restParams: any = {};
+      this.page = (this.page <1)? 1 : this.page;
+      this.page = (this.page > this.pages)? this.pages : this.page;
+      restParams.page = this.page;
+      restParams.count = this.count;
+      restParams.order = this.order.toString();
+      restParams.select = this.select.toString();
+       this.restService.get(path, restParams)
           .then(
             d => {
                 this.data = d.data; 
@@ -97,16 +130,20 @@ export class ListpageComponent implements OnInit, OnDestroy {
                 this.start=d.start; 
                 this.end=d.end; 
                 this.pages= ~~((this.total-1) / this.count) + 1;
+                console.log(this.data);
                 }           
             )
           .catch(message => {this.errorMessage = message; this.page=1; this.pages=1});
       ;
     } 
 
-  getRestHeaders(path: string) {
-      this.restService.getRestHeaders(path)
+  getHeaders(path: string) {
+      this.restService.getHeaders(path)
           .then(
-            d => {this.headers = d.data.columns}           
+            d => {this.headers = d.data.columns;
+              this.checkSelect();
+              this.get(this.mode);
+              }           
             )
           .catch(message => {this.errorMessage = message});
       ;

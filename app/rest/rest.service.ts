@@ -9,29 +9,36 @@ export class RestService {
   constructor (private http: Http) {  }
   private configUrl = '/api/v1/';  // URL to web API
 
-  get (path: string, page: number, count:number = 10): Promise<any> {
+  get (path: string, params?: any): Promise<any> {
+//    console.log(params);
     let headers = new Headers();
-    headers.append('Range-Unit', 'items');
-    headers.append('Range', `${(page-1) * count}-${page * count -1}`);
+    let id: number;
+    let page: number;
+    let count: number;
     let parm: string = '';
+    if (typeof params !== 'undefined') {
+      if (typeof params.id !== 'undefined') {
+        id = params.id;
+        page = 1;
+        count = 0;
+        parm='uuid=eq.'+id;
+      } else {
+        page = (typeof params.page !== 'undefined') ? params.page : 1;
+        count = (typeof params.count !== 'undefined') ? params.count : 20;
+      };
+      parm = (typeof params.order !== 'undefined') ? ((parm.length > 0)? `${parm}&`: '') + `order=${params.order}` : parm;
+      parm = (typeof params.select !== 'undefined') ? ((parm.length > 0)? `${parm}&`: '') + `select=${params.select}` : parm;
+    }
+    headers.append('Range-Unit', 'items');
+    headers.append('Range', `${(page -1) * count}-${page * count -1}`);
+    parm = (parm.length > 0) ? `?${parm}`: '';
     return this.http.get(this.configUrl+path+parm, {headers: headers})
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);
   }
 
-  getRest (path: string, id?: string): Promise<any> {
-    let headers = new Headers();
-    headers.append('Range-Unit', 'items');
-    headers.append('Range', '0-0');
-    let parm: string = '';
-    if (id!==undefined) {parm='?uuid=eq.'+id};
-    return this.http.get(this.configUrl+path+parm, {headers: headers})
-                    .toPromise()
-                    .then(this.extractData)
-                    .catch(this.handleError);
-  }
-  getRestHeaders (path: string): Promise<any> {
+  getHeaders (path: string): Promise<any> {
     return this.http.request(this.configUrl+path, {method: 'Options'})
                     .toPromise()
                     .then(this.extractData)
