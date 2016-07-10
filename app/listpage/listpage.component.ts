@@ -23,6 +23,7 @@ export class ListpageComponent implements OnInit, OnDestroy {
   page: number = 1;
   pages: number = 1;
   count: number = 10;
+  navpages: number[];
 
 	constructor(
 	    private route: ActivatedRoute,
@@ -109,5 +110,5 @@ export class ListpageComponent implements OnInit, OnDestroy {
             )
           .catch(message => {this.errorMessage = message});
       ;
-    }    
+    }   
 }
