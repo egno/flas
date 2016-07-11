@@ -46,6 +46,10 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.router.navigate(['/l', mode]);
   }
 
+  parseEvent(event: string){
+    return event === null ? null : JSON.parse(event);
+  }
+
   getType(header: any) {
     let res: string = 'text';
 //    console.log(header.type);
@@ -122,6 +126,11 @@ export class EntityComponent implements OnInit, OnDestroy {
   }
 
   onSave(item: any) {
+    this.headers.map(h => {
+      if (h.references && item[h.name] !== null) {
+         item[h.name]=item[h.name].uuid
+      }
+    });
     if (item.uuid !== undefined) {
       this.restService.patch(this.mode, this.item)
         .then(res => {this.router.navigate(['/l', this.mode, item.uuid])});

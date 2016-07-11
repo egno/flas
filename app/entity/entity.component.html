@@ -19,10 +19,14 @@
 						</div>
 						<div *ngIf="editMode && h.name !== 'uuid'">
 							<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
-							<select *ngIf="h.references && foreigners[h.name] && foreigners[h.name].list" [(ngModel)]="item[h.name]">
-								<option *ngFor="let l of foreigners[h.name].list" [value]="l.uuid" [selected]="l.uuid === item[h.name].uuid">{{l.d}}</option>
+
+							<select *ngIf="h.references && foreigners[h.name] && foreigners[h.name].list" [ngModel]="item[h.name] | json" (ngModelChange)="item[h.name]=parseEvent($event)">
+								<option [value]="null"> - </option>
+								<option *ngFor="let l of foreigners[h.name].list" [value]="l | json">{{l.d}}</option>
 							</select>
+
 						</div>
+						{{item[h.name] | json}} 
 					</td>
 				</tr>
 			</tbody>
