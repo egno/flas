@@ -3,12 +3,16 @@ import { Router, ActivatedRoute }       from '@angular/router';
 import { NgForm }    from '@angular/common';
 
 import { RestService }     from '../rest/rest.service';
+import { SelectListComponent }  from '../select_list/select_list.component';
+
+import { ListpageComponent }  from '../listpage/listpage.component';
 
 
 @Component({
   selector: 'entity',
   templateUrl: 'app/entity/entity.component.html',
   providers: [RestService],
+  directives: [ListpageComponent]
 })
 
 export class EntityComponent implements OnInit, OnDestroy {
@@ -20,6 +24,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   editMode: any;
   select: Array<string> = [];
   foreigners: any = {};
+  selectIsVisible: boolean = false;
     private sub: any;
 
 	constructor(
@@ -44,6 +49,18 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   onGo(mode: string) {
     this.router.navigate(['/l', mode]);
+  }
+
+  onSelectValue(name: string, event:string){
+    console.log(event);
+    if (event) {
+      this.item[name] = JSON.parse(event);
+    };
+    this.selectIsVisible = '';
+  }
+
+  openSelect(){
+    this.selectIsVisible = 'visible';
   }
 
   parseEvent(event: string){

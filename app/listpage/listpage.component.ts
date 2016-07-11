@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute }       from '@angular/router';
 
 import { RestService }     from '../rest/rest.service';
@@ -11,8 +11,12 @@ import { RestService }     from '../rest/rest.service';
 })
 
 export class ListpageComponent implements OnInit, OnDestroy {
-	mode: string;
-	headers: any[];
+ 
+ @Input() mode:string;
+ @Output() selectEvent  = new EventEmitter<string>();
+
+	modal: string;
+  headers: any[];
 	data: any[];
 	errorMessage: any;
   selectedItem: any;
@@ -35,8 +39,11 @@ export class ListpageComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 	this.sub = this.route.params.subscribe(params => {
-	   	this.mode = params['mode']; 
-//	   	console.log(this.mode);
+      if (this.mode) {
+        this.modal = 'modal';
+      } else {
+	   	  this.mode = params['mode']; 
+      }
    		this.getHeaders(this.mode);
 	 });
 	}
@@ -47,6 +54,14 @@ export class ListpageComponent implements OnInit, OnDestroy {
 
   onSelect(item: any) {
     this.selectedItem = item;
+  }
+
+  onSelectAndClose(item: any){
+    this.selectEvent.emit(JSON.stringify(item));
+  }
+
+  onClose(item: any){
+    this.selectEvent.emit(null);
   }
   
   onAdd(item: any) {

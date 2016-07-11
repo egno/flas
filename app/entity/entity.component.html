@@ -24,10 +24,23 @@
 								<option [value]="null"> - </option>
 								<option *ngFor="let l of foreigners[h.name].list" [value]="l | json">{{l.d}}</option>
 							</select>
+							<button *ngIf="h.references" type="button" class="btn btn-default btn-xs" (click)="openSelect()" >Change</button>
 						</div>
 					</td>
 				</tr>
 			</tbody>
 		</table>
+	</div>
+</div>
+<div >
+	<div *ngIf="selectIsVisible" >
+		<div >
+			<div >
+				<div >
+					SELECT
+					<listpage [mode]="'buildings'" (selectEvent)="onSelectValue('parent',$event)"></listpage>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
