@@ -24,9 +24,7 @@
 								<option [value]="null"> - </option>
 								<option *ngFor="let l of foreigners[h.name].list" [value]="l | json">{{l.d}}</option>
 							</select>
-
 						</div>
-						{{item[h.name] | json}} 
 					</td>
 				</tr>
 			</tbody>
