@@ -7,7 +7,7 @@
 			<button type="button" class="btn btn-default btn-sm" (click)="onAdd()">Add</button>
 	</div>
 	<div *ngIf="modal">
-			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onSelectAndClose(selectedItem)">Save</button>
+			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onSelectAndClose(selectedItem)">Select</button>
 			<button type="button" class="btn btn-default btn-sm" (click)="onClose()">Cancel</button>
 	</div>
 	<div>
