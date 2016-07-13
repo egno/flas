@@ -25,7 +25,10 @@ export class EntityComponent implements OnInit, OnDestroy {
   select: Array<string> = [];
   foreigners: any = {};
   selectIsVisible: boolean = false;
+  refmode: string;
+  refname: string;
     private sub: any;
+
 
 	constructor(
 	    private route: ActivatedRoute,
@@ -59,7 +62,9 @@ export class EntityComponent implements OnInit, OnDestroy {
     this.selectIsVisible = false;
   }
 
-  openSelect(){
+  openSelect(h: any){
+    this.refmode = h.references.table;
+    this.refname = h.name;
     this.selectIsVisible = true;
   }
 

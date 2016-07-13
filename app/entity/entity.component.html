@@ -40,7 +40,7 @@
 
 							<div *ngIf="h.references && h.references.table !== 'enums' && foreigners[h.name] && foreigners[h.name].list">
 								<input *ngIf="item[h.name] !== null" readonly="readonly" [type]="getType(h)" [ngModel]="item[h.name].d" />
-								<button *ngIf="h.references" type="button" class="btn btn-default btn-xs" (click)="openSelect()" >Change</button>
+								<button *ngIf="h.references" type="button" class="btn btn-default btn-xs" (click)="openSelect(h)" >Change</button>
 							</div>
 						</div>
 					</td>
@@ -50,12 +50,12 @@
 	</div>
 </div>
 <div >
-	<div *ngIf="selectIsVisible" >
+	<div *ngIf="selectIsVisible && refmode" >
 		<div class="select-list">
 			<div >
 				<div >
 					SELECT
-					<listpage [mode]="'buildings'" (selectEvent)="onSelectValue('parent',$event)"></listpage>
+					<listpage [mode]="refmode" (selectEvent)="onSelectValue(refname,$event)"></listpage>
 				</div>
 			</div>
 		</div>
