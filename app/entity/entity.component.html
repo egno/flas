@@ -1,4 +1,17 @@
-<div>
+    <style>
+      .select-list {
+      		position: absolute;
+	        left: 0;
+	        right: 0;
+	        top: 0;
+	        bottom: 0;
+	        padding: 10;
+	        overflow: auto;
+	        background-color: white;
+      }
+    </style>
+
+    <div>
 	<h3 (click)="onGo(mode)">{{mode}}</h3>
 	<div>
 			<button type="button" class="btn btn-default btn-xs" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">Edit</button>
@@ -21,7 +34,7 @@
 							<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
 
 							<select *ngIf="h.references && h.references.table === 'enums' && foreigners[h.name] && foreigners[h.name].list" [ngModel]="item[h.name] | json" (ngModelChange)="item[h.name]=parseEvent($event)">
-								<option [value]="null"> - </option>
+								<option *ngIf="h.nullable" [value]="null"> - </option>
 								<option *ngFor="let l of foreigners[h.name].list" [value]="l | json">{{l.d}}</option>
 							</select>
 
@@ -38,7 +51,7 @@
 </div>
 <div >
 	<div *ngIf="selectIsVisible" >
-		<div >
+		<div class="select-list">
 			<div >
 				<div >
 					SELECT

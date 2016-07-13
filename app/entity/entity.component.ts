@@ -56,11 +56,11 @@ export class EntityComponent implements OnInit, OnDestroy {
     if (event) {
       this.item[name] = JSON.parse(event);
     };
-    this.selectIsVisible = '';
+    this.selectIsVisible = false;
   }
 
   openSelect(){
-    this.selectIsVisible = 'visible';
+    this.selectIsVisible = true;
   }
 
   parseEvent(event: string){
