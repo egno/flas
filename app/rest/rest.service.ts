@@ -3,11 +3,12 @@ import { Http, Headers, Response } from '@angular/http';
 //import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
+import appGlobals = require('./../globals');
 
 @Injectable()
 export class RestService {
   constructor (private http: Http) {  }
-  private configUrl = '/api/v1/';  // URL to web API
+  private configUrl = appGlobals.api || '/api/v1/';  // URL to web API
 
   get (path: string, params?: any, url?: string): Promise<any> {
 //    console.log(params);

@@ -1,6 +1,12 @@
 <div>
 	<h3>About</h3>
-	<div>Version: {{config.version}}</div>
+	<h4>Client settings</h4>
+	<ul>
+		<li><span>version:</span> {{config.version}}</li>
+		<li><span>API path:</span> <input [(ngModel)]="config.api"/>
+			<button type="button" class="btn btn-default btn-xs" (click)="onSave('api')">Save</button>
+		</li>
+	</ul>
 </div>
 <div>
 	<h4>Server settings</h4>
