@@ -8,6 +8,15 @@
 	        padding: 10;
 	        overflow: auto;
 	        background-color: white;
+		    border-width: 5;
+		    border-color: gray;
+		    border-style: solid;
+		    border-radius: 10px;
+		    padding: 5px;
+      }
+      .select-header {
+		background-color: #999;
+		width: 100%;
       }
     </style>
 
@@ -54,8 +63,8 @@
 		<div class="select-list">
 			<div >
 				<div >
-					SELECT
-					<listpage [mode]="refmode" (selectEvent)="onSelectValue(refname,$event)"></listpage>
+					<div class="select-header">SELECT</div>
+					<listpage [imode]="refmode" (selectEvent)="onSelectValue(refname,$event)"></listpage>
 				</div>
 			</div>
 		</div>

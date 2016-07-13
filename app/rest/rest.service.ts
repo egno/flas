@@ -9,7 +9,7 @@ export class RestService {
   constructor (private http: Http) {  }
   private configUrl = '/api/v1/';  // URL to web API
 
-  get (path: string, params?: any): Promise<any> {
+  get (path: string, params?: any, url?: string): Promise<any> {
 //    console.log(params);
     let headers = new Headers();
     let id: number;
@@ -32,24 +32,27 @@ export class RestService {
     headers.append('Range-Unit', 'items');
     headers.append('Range', `${(page -1) * count}-${page * count -1}`);
     parm = (parm.length > 0) ? `?${parm}`: '';
-    return this.http.get(this.configUrl+path+parm, {headers: headers})
+    url = (url) ? url : this.configUrl;
+    return this.http.get(url+path+parm, {headers: headers})
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);
   }
 
-  getHeaders (path: string): Promise<any> {
-    return this.http.request(this.configUrl+path, {method: 'Options'})
+  getHeaders (path: string, url?: string): Promise<any> {
+    url = (url) ? url : this.configUrl;
+    return this.http.request(url+path, {method: 'Options'})
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);
   }
 
-  patch(mode: string, item: any) {
+  patch(mode: string, item: any, url?: string) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    let url = `${this.configUrl}${mode}?uuid=eq.${item.uuid}`;
+    url = (url) ? url : this.configUrl;
+    url = `${this.configUrl}${mode}?uuid=eq.${item.uuid}`;
 
     return this.http
                .patch(url, JSON.stringify(item), {headers: headers})
@@ -58,11 +61,12 @@ export class RestService {
                .catch(this.handleError);
   }
 
-  post(mode: string, item: any) {
+  post(mode: string, item: any, url?: string) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    let url = `${this.configUrl}${mode}`;
+    url = (url) ? url : this.configUrl;
+    url = `${this.configUrl}${mode}`;
 
     return this.http
                .post(url, JSON.stringify(item), {headers: headers})
@@ -75,11 +79,12 @@ export class RestService {
                .catch(this.handleError);
   }
 
-  delete(mode: string, item: any) {
+  delete(mode: string, item: any, url?: string) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    let url = `${this.configUrl}${mode}?uuid=eq.${item.uuid}`;
+    url = (url) ? url : this.configUrl;
+    url = `${this.configUrl}${mode}?uuid=eq.${item.uuid}`;
 
     return this.http
                .delete(url, {headers: headers})

@@ -12,10 +12,11 @@ import { RestService }     from '../rest/rest.service';
 
 export class ListpageComponent implements OnInit, OnDestroy {
  
- @Input() mode:string;
+ @Input() imode:string;
  @Output() selectEvent  = new EventEmitter<string>();
 
-	modal: string;
+	mode:string;
+  modal: string;
   headers: any[];
 	data: any[];
 	errorMessage: any;
@@ -39,11 +40,14 @@ export class ListpageComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 	this.sub = this.route.params.subscribe(params => {
-      if (this.mode) {
+      if (this.imode) {
         this.modal = 'modal';
+        this.mode = this.imode;
       } else {
+        this.modal = '';
 	   	  this.mode = params['mode']; 
       }
+      this.headers = [];
    		this.getHeaders(this.mode);
 	 });
 	}
