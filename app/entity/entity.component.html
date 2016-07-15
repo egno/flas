@@ -35,11 +35,11 @@
 						{{h.name}}
 					</td>
 					<td >
-						<div *ngIf="!editMode || h.name === 'uuid'">
+						<div *ngIf="!editMode || h.name === 'id'">
 							<div *ngIf="!h.references"> {{item[h.name]}} </div>
 							<div *ngIf="h.references && item[h.name] && item[h.name] !== null"> {{item[h.name].d}} </div>
 						</div>
-						<div *ngIf="editMode && h.name !== 'uuid'">
+						<div *ngIf="editMode && h.name !== 'id'">
 							<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
 
 							<select *ngIf="h.references && h.references.table === 'enums' && foreigners[h.name] && foreigners[h.name].list" [ngModel]="item[h.name] | json" (ngModelChange)="item[h.name]=parseEvent($event)">

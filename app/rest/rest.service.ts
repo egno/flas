@@ -3,12 +3,12 @@ import { Http, Headers, Response } from '@angular/http';
 //import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
-import appGlobals = require('./../globals');
+import appGlobals = require('../globals');
 
 @Injectable()
 export class RestService {
   constructor (private http: Http) {  }
-  private configUrl = appGlobals.api || '/api/v1/';  // URL to web API
+  private configUrl = appGlobals.api;  // URL to web API
 
   get (path: string, params?: any, url?: string): Promise<any> {
 //    console.log(params);
@@ -22,7 +22,7 @@ export class RestService {
         id = params.id;
         page = 1;
         count = 0;
-        parm='uuid=eq.'+id;
+        parm='id=eq.'+id;
       } else {
         page = (typeof params.page !== 'undefined') ? params.page : 1;
         count = (typeof params.count !== 'undefined') ? params.count : 20;
@@ -53,7 +53,7 @@ export class RestService {
     headers.append('Content-Type', 'application/json');
 
     url = (url) ? url : this.configUrl;
-    url = `${this.configUrl}${mode}?uuid=eq.${item.uuid}`;
+    url = `${this.configUrl}${mode}?id=eq.${item.id}`;
 
     return this.http
                .patch(url, JSON.stringify(item), {headers: headers})
@@ -85,7 +85,7 @@ export class RestService {
     headers.append('Content-Type', 'application/json');
 
     url = (url) ? url : this.configUrl;
-    url = `${this.configUrl}${mode}?uuid=eq.${item.uuid}`;
+    url = `${this.configUrl}${mode}?id=eq.${item.id}`;
 
     return this.http
                .delete(url, {headers: headers})

@@ -81,17 +81,31 @@ export class EntityComponent implements OnInit, OnDestroy {
     return res;
   }
 
+  transformItem(){
+    this.item = this.headers.map(h => {
+      if (h.references) {
+        let val: any = {};
+        val.id = null;
+        val.d='';
+        return val;
+      } else {
+        return this.item[h.name];
+      };
+    });
+    console.log(this.item);
+  }
+
   checkSelect(){
     this.select = this.headers.map(h => {return <string>
-      (h.references) ? `${h.name}{uuid,d}` : h.name;
+      (h.references) ? `${h.name}{id,d}` : h.name;
     });
 //    console.log(this.select);
   }
 
   getForeigners(){
     let restParams: any = {};
-    restParams.select = 'uuid,d';
-    restParams.order = 'd,uuid';
+    restParams.select = 'id,d';
+    restParams.order = 'd,id';
     this.headers.map(h => {
       if (h.references) {
  //       console.log('getForeigners: ', h.references.table, h.name, this.item);
@@ -126,11 +140,12 @@ export class EntityComponent implements OnInit, OnDestroy {
           .then(
             d => {this.headers = d.data.columns; 
                 console.log(this.headers);
+                   this.checkSelect();
                    if (this.editMode !== 'new') {
-                     this.headers = d.data.columns;
-                     this.checkSelect();
                      this.get(this.mode, this.id);
-                   }
+                   } else {
+                     this.transformItem();
+                   };
               }           
             )
           .catch(message => {this.errorMessage = message});
@@ -138,11 +153,11 @@ export class EntityComponent implements OnInit, OnDestroy {
     }  
 
   onEdit(item: any) {
-    this.router.navigate(['/l', this.mode, item.uuid, 'e']);
+    this.router.navigate(['/l', this.mode, item.id, 'e']);
   }
 
   onDelete(item: any) {
-    if (item.uuid !== undefined) {
+    if (item.id !== undefined) {
       this.restService.delete(this.mode, item)
       .then(res => {this.router.navigate(['/l', this.mode])})
     }
@@ -151,12 +166,12 @@ export class EntityComponent implements OnInit, OnDestroy {
   onSave(item: any) {
     this.headers.map(h => {
       if (h.references && item[h.name] !== null) {
-         item[h.name]=item[h.name].uuid
+         item[h.name]=item[h.name].id
       }
     });
-    if (item.uuid !== undefined) {
+    if (item.id !== undefined) {
       this.restService.patch(this.mode, this.item)
-        .then(res => {this.router.navigate(['/l', this.mode, item.uuid])});
+        .then(res => {this.router.navigate(['/l', this.mode, item.id])});
     } else {
       this.restService.post(this.mode, this.item)
         .then(id => {this.router.navigate(['/l', this.mode, id])});

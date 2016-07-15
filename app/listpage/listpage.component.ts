@@ -73,11 +73,11 @@ export class ListpageComponent implements OnInit, OnDestroy {
   }
 
   onEdit(item: any) {
-    this.router.navigate(['/l', this.mode, item.uuid, 'e']);
+    this.router.navigate(['/l', this.mode, item.id, 'e']);
   }
 
   onView(item: any) {
-    this.router.navigate(['/l', this.mode, item.uuid]);
+    this.router.navigate(['/l', this.mode, item.id]);
   }
 
   onNext(page: number = 0) {
@@ -113,7 +113,7 @@ export class ListpageComponent implements OnInit, OnDestroy {
   }
 
   onDelete(item: any) {
-    if (item.uuid !== undefined) {
+    if (item.id !== undefined) {
       this.restService.delete(this.mode, item)
       .then(res => {
           this.data = this.data.filter(i => i !== item);
@@ -128,7 +128,7 @@ export class ListpageComponent implements OnInit, OnDestroy {
 
   checkSelect(){
     this.select = this.headers.map(i => {return <string>
-      (i.references) ? `${i.name}{uuid,d}` : i.name;
+      (i.references) ? `${i.name}{id,d}` : i.name;
     });
     console.log(this.select);
   }
