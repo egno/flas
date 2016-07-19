@@ -110,14 +110,14 @@ export class EntityComponent implements OnInit, OnDestroy {
       if (h.references) {
  //       console.log('getForeigners: ', h.references.table, h.name, this.item);
          this.restService.get(h.references.table, restParams)
-           .then(d=>{
+           .then((d:any) => {
                let f: any = {};
                f.list=d.data;
                f.total=d.total;
                this.foreigners[h.name]=f;
                console.log(this.foreigners);
              })
-           .catch(message => {this.errorMessage = message; console.log(this.errorMessage)})
+           .catch((message:string) => {this.errorMessage = message; console.log(this.errorMessage)})
       }
     });
   } 
@@ -128,17 +128,17 @@ export class EntityComponent implements OnInit, OnDestroy {
       restParams.select = this.select.toString();
       return this.restService.get(path, restParams)
           .then(
-            d => {this.item = d.data[0];
+            (d:any) => {this.item = d.data[0];
                 this.getForeigners();//; console.log(this.item)
               }           
             )
-          .catch(message => {this.errorMessage = message});
+          .catch((message:string) => {this.errorMessage = message});
      } 
 
     getHeaders(path: string) {
       this.restService.getHeaders(path)
           .then(
-            d => {this.headers = d.data.columns; 
+            (d:any) => {this.headers = d.data.columns; 
                 console.log(this.headers);
                    this.checkSelect();
                    if (this.editMode !== 'new') {
@@ -148,7 +148,7 @@ export class EntityComponent implements OnInit, OnDestroy {
                    };
               }           
             )
-          .catch(message => {this.errorMessage = message});
+          .catch((message:string) => {this.errorMessage = message});
       ;
     }  
 
@@ -159,7 +159,7 @@ export class EntityComponent implements OnInit, OnDestroy {
   onDelete(item: any) {
     if (item.id !== undefined) {
       this.restService.delete(this.mode, item)
-      .then(res => {this.router.navigate(['/l', this.mode])})
+      .then((res:any) => {this.router.navigate(['/l', this.mode])})
     }
   }
 
@@ -171,10 +171,10 @@ export class EntityComponent implements OnInit, OnDestroy {
     });
     if (item.id !== undefined) {
       this.restService.patch(this.mode, this.item)
-        .then(res => {this.router.navigate(['/l', this.mode, item.id])});
+        .then((res:any) => {this.router.navigate(['/l', this.mode, item.id])});
     } else {
       this.restService.post(this.mode, this.item)
-        .then(id => {this.router.navigate(['/l', this.mode, id])});
+        .then((id:string) => {this.router.navigate(['/l', this.mode, id])});
     }
   }
 
