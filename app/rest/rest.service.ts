@@ -27,6 +27,7 @@ export class RestService {
         page = (typeof params.page !== 'undefined') ? params.page : 1;
         count = (typeof params.count !== 'undefined') ? params.count : 20;
       };
+      parm = (typeof params.where !== 'undefined') ? ((parm.length > 0)? `${parm}&`: '') + `${params.where}` : parm;
       parm = (typeof params.order !== 'undefined') ? ((parm.length > 0)? `${parm}&`: '') + `order=${params.order}` : parm;
       parm = (typeof params.select !== 'undefined') ? ((parm.length > 0)? `${parm}&`: '') + `select=${params.select}` : parm;
     }

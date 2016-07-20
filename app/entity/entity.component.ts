@@ -90,11 +90,15 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   getForeigners(){
     let restParams: any = {};
+    let enumTableName: string = 'enums';
     restParams.select = 'id,d';
-    restParams.order = 'd,id';
+    restParams.order = 'code,d';
+    restParams.where = '';
     this.headers.map(h => {
-      if (h.references && h.references.table === 'enums') {
+      if (h.references && h.references.table === enumTableName) {
  //       console.log('getForeigners: ', h.references.table, h.name, this.item);
+         restParams.where = 'grp=<@.'+this.mode+'.'+h.name;
+         console.log(restParams);
          this.restService.get(h.references.table, restParams)
            .then((d:any) => {
                let f: any = {};

@@ -21,7 +21,7 @@
     </style>
 
     <div>
-	<h3 (click)="onGo(mode)">{{mode}}</h3>
+	<div><a (click)="onGo(mode)">{{mode}}</a></div>
 	<div>
 			<button type="button" class="btn btn-default btn-xs" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">Edit</button>
 			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">Save</button>
@@ -42,7 +42,7 @@
 						<div *ngIf="editMode && h.name !== 'id'">
 							<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
 
-							<select *ngIf="h.references && h.references.table === 'enums' && foreigners[h.name] && foreigners[h.name].list" [ngModel]="item[h.name] | json" (ngModelChange)="item[h.name]=parseEvent($event)">
+							<select *ngIf="h.references && h.references.table === 'enums' && foreigners[h.name] && foreigners[h.name].list"  [ngModel]="item[h.name] | json" (ngModelChange)="item[h.name]=parseEvent($event)">
 								<option *ngIf="h.nullable" [value]="null"> - </option>
 								<option *ngFor="let l of foreigners[h.name].list" [value]="l | json">{{l.d}}</option>
 							</select>
