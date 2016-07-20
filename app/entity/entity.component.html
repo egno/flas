@@ -47,8 +47,8 @@
 								<option *ngFor="let l of foreigners[h.name].list" [value]="l | json">{{l.d}}</option>
 							</select>
 
-							<div *ngIf="h.references && h.references.table !== 'enums' && foreigners[h.name] && foreigners[h.name].list">
-								<input *ngIf="item[h.name] !== null" readonly="readonly" [type]="getType(h)" [ngModel]="item[h.name].d" />
+							<div *ngIf="h.references && h.references.table !== 'enums'">
+								<input *ngIf="item[h.name] !== null && item[h.name] && item[h.name].d" readonly="readonly" [type]="getType(h)" [ngModel]="item[h.name].d" />
 								<button *ngIf="h.references" type="button" class="btn btn-default btn-xs" (click)="openSelect(h)" >Change</button>
 							</div>
 						</div>

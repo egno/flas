@@ -81,20 +81,6 @@ export class EntityComponent implements OnInit, OnDestroy {
     return res;
   }
 
-  transformItem(){
-    this.item = this.headers.map(h => {
-      if (h.references) {
-        let val: any = {};
-        val.id = null;
-        val.d='';
-        return val;
-      } else {
-        return this.item[h.name];
-      };
-    });
-    console.log(this.item);
-  }
-
   checkSelect(){
     this.select = this.headers.map(h => {return <string>
       (h.references) ? `${h.name}{id,d}` : h.name;
@@ -107,7 +93,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     restParams.select = 'id,d';
     restParams.order = 'd,id';
     this.headers.map(h => {
-      if (h.references) {
+      if (h.references && h.references.table === 'enums') {
  //       console.log('getForeigners: ', h.references.table, h.name, this.item);
          this.restService.get(h.references.table, restParams)
            .then((d:any) => {
@@ -115,11 +101,18 @@ export class EntityComponent implements OnInit, OnDestroy {
                f.list=d.data;
                f.total=d.total;
                this.foreigners[h.name]=f;
-               console.log(this.foreigners);
+               //console.log(this.foreigners);
              })
            .catch((message:string) => {this.errorMessage = message; console.log(this.errorMessage)})
+        if (!this.item[h.name]) {
+          let v: any = {};
+          v.d = '';
+          v.id = null;
+          this.item[h.name] = v;
+        }
       }
     });
+    //console.log(this.item);
   } 
 
     get(path: string, id: string) {
@@ -129,7 +122,7 @@ export class EntityComponent implements OnInit, OnDestroy {
       return this.restService.get(path, restParams)
           .then(
             (d:any) => {this.item = d.data[0];
-                this.getForeigners();//; console.log(this.item)
+                //; console.log(this.item)
               }           
             )
           .catch((message:string) => {this.errorMessage = message});
@@ -143,9 +136,8 @@ export class EntityComponent implements OnInit, OnDestroy {
                    this.checkSelect();
                    if (this.editMode !== 'new') {
                      this.get(this.mode, this.id);
-                   } else {
-                     this.transformItem();
                    };
+                   this.getForeigners();
               }           
             )
           .catch((message:string) => {this.errorMessage = message});
@@ -165,7 +157,7 @@ export class EntityComponent implements OnInit, OnDestroy {
 
   onSave(item: any) {
     this.headers.map(h => {
-      if (h.references && item[h.name] !== null) {
+      if (h.references && item[h.name] && item[h.name] !== null) {
          item[h.name]=item[h.name].id
       }
     });
