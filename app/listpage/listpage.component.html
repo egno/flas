@@ -1,10 +1,10 @@
 <div>
-	<h3>{{mode}} {{modal}}</h3>
+	<h3>{{dmode}} {{modal}}</h3>
 	<div *ngIf="!modal">
-			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onView(selectedItem)">View</button>
-			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onEdit(selectedItem)">Edit</button>
-			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onDelete(selectedItem)">Del</button>
-			<button type="button" class="btn btn-default btn-sm" (click)="onAdd()">Add</button>
+			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onView(selectedItem)">{{labels.View}}</button>
+			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onEdit(selectedItem)">{{labels.Edit}}</button>
+			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onDelete(selectedItem)">{{labels.Del}}</button>
+			<button type="button" class="btn btn-default btn-sm" (click)="onAdd()">{{labels.Add}}</button>
 	</div>
 	<div *ngIf="modal">
 			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onSelectAndClose(selectedItem)">Select</button>
@@ -13,7 +13,7 @@
 	<div>
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page <= 1" (click)="onFirst()"> << </button> 
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page <= 1" (click)="onPrev(page)"> < </button> 
-		Items:{{start}}-{{end}}/{{total}} Page:{{page}}/{{pages}} <input [(ngModel)]="count"/>
+		{{start}}-{{end}}/{{total}} {{page}}/{{pages}} <input [(ngModel)]="count"/>
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page >= pages" (click)="onNext(page)"> > </button>
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page >= pages" (click)="onLast()"> >> </button>
 	</div>
@@ -21,8 +21,8 @@
 		<table class="table table-striped table-condensed table-hover ">
 			<thead>
 				<tr>
-					<th *ngFor="let header of headers">
-						<div *ngIf="header.name !== 'id'" (click)="onSort(header)">{{header.name}} 
+					<th *ngFor="let header of dheaders">
+						<div (click)="onSort(header)">{{header.d}} 
 							<span><sup>{{getOrder(header)}}</sup></span>
 						</div>
 					</th>
@@ -30,8 +30,8 @@
 			</thead>
 			<tbody>
 				<tr *ngFor="let item of data" (click)="onSelect(item)">
-					<td *ngFor="let h of headers" [class.info]="item === selectedItem">
-						<div *ngIf="h.name !== 'id'">
+					<td *ngFor="let h of dheaders" [class.info]="item === selectedItem">
+						<div>
 							<div *ngIf="!h.references"> {{item[h.name]}}</div>
 							<div *ngIf="h && h.references && item && item[h.name] && item[h.name] !== null"> {{item[h.name].d}}</div>
 						</div>

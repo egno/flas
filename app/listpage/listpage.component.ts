@@ -1,23 +1,27 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, 
+  OnInit, AfterContentInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute }       from '@angular/router';
 
 import { RestService }     from '../rest/rest.service';
+import { TranslateService }  from '../translate/translate.service';
 
 
 @Component({
   selector: 'listpage',
   templateUrl: 'app/listpage/listpage.component.html',
-  providers: [RestService],
+  providers: [RestService, TranslateService],
 })
 
-export class ListpageComponent implements OnInit, OnDestroy {
+export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
  
  @Input() imode:string;
  @Output() selectEvent  = new EventEmitter<string>();
 
 	mode:string;
+  dmode: string;
   modal: string;
   headers: any[];
+  dheaders: any[];
 	data: any[];
 	errorMessage: any;
   selectedItem: any;
@@ -31,14 +35,17 @@ export class ListpageComponent implements OnInit, OnDestroy {
   order: Array<string> = [];
   select: Array<string> = [];
   private sub: any;
+  labels: any = {};
 
 	constructor(
 	    private route: ActivatedRoute,
 	    private router: Router,
-	    private restService: RestService
+	    private restService: RestService,
+      private translateService: TranslateService
 	  	) {}
 
 	ngOnInit() {
+    console.log('ngOnInit');
 	this.sub = this.route.params.subscribe(params => {
       if (this.imode) {
         this.modal = 'modal';
@@ -49,8 +56,23 @@ export class ListpageComponent implements OnInit, OnDestroy {
       }
       this.headers = [];
    		this.getHeaders(this.mode);
-	 });
+      this.dmode = this.translateService.get(this.mode);
+   });
+    this.labels.Edit='Edit';
+    this.labels.Del='Del';
+    this.labels.View='View';
+    this.labels.Add='Add';
+    console.log(this.dmode);
 	}
+
+  ngAfterContentInit(){
+    console.log('ngAfterContentInit');
+      for (let e in this.labels) {
+        this.labels[e]=this.translateService.get(e);
+      }
+    this.dmode = this.translateService.get(this.mode);
+    console.log(this.dmode);
+  }
 
 	ngOnDestroy() {
 	this.sub.unsubscribe();
@@ -107,6 +129,19 @@ export class ListpageComponent implements OnInit, OnDestroy {
     this.get(this.mode);
   }
 
+
+  translateHeaders(){
+    this.headers = this.headers.map(
+        h => {h.d = this.translateService.get(h.name); return h;}
+      )
+  }
+
+  getDisplayHeaders(){
+    this.dheaders = this.headers.filter(
+      h => (h.name !== 'id' && h.name !== 'ts') 
+      );
+  }
+
   getOrder(header: any) {
     let res = this.order.findIndex(i => i === header.name);
     if (res >= 0) {return res+1};
@@ -135,6 +170,7 @@ export class ListpageComponent implements OnInit, OnDestroy {
 
   get(path: string) {
       let restParams: any = {};
+      this.selectedItem='';
       this.page = (this.page <1)? 1 : this.page;
       this.page = (this.page > this.pages)? this.pages : this.page;
       restParams.page = this.page;
@@ -162,6 +198,8 @@ export class ListpageComponent implements OnInit, OnDestroy {
             d => {this.headers = d.data.columns;
               this.checkSelect();
               this.get(this.mode);
+              this.translateHeaders();
+              this.getDisplayHeaders();
               }           
             )
           .catch(message => {this.errorMessage = message});

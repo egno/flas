@@ -1,8 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, AfterContentInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute }       from '@angular/router';
 import { NgForm }    from '@angular/common';
 
 import { RestService }     from '../rest/rest.service';
+import { TranslateService }  from '../translate/translate.service';
 import { SelectListComponent }  from '../select_list/select_list.component';
 
 import { ListpageComponent }  from '../listpage/listpage.component';
@@ -11,13 +12,15 @@ import { ListpageComponent }  from '../listpage/listpage.component';
 @Component({
   selector: 'entity',
   templateUrl: 'app/entity/entity.component.html',
-  providers: [RestService],
+  providers: [RestService, TranslateService],
   directives: [ListpageComponent]
 })
 
-export class EntityComponent implements OnInit, OnDestroy {
+export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
 	mode: string;
+  dmode: string;
 	headers: any[];
+  dheaders: any [];
   id: string;
 	item: any = {};
 	errorMessage: any;
@@ -27,13 +30,15 @@ export class EntityComponent implements OnInit, OnDestroy {
   selectIsVisible: boolean = false;
   refmode: string;
   refname: string;
-    private sub: any;
+  private sub: any;
+  labels: any = {};
 
 
 	constructor(
 	    private route: ActivatedRoute,
 	    private router: Router,
-	    private restService: RestService
+	    private restService: RestService,
+		  private translateService: TranslateService
 	  	) {}
 
 	ngOnInit() {
@@ -43,8 +48,22 @@ export class EntityComponent implements OnInit, OnDestroy {
       this.editMode = params['edit']; 
 //	   	console.log(this.mode, this.id, this.editMode);
    		this.getHeaders(this.mode);
+      this.dmode = this.translateService.get(this.mode);
 	 });
+    this.labels.Edit='Edit';
+    this.labels.Del='Del';
+    this.labels.View='View';
+    this.labels.Add='Add';
+    this.labels.Save='Save';
 	}
+
+  ngAfterContentInit(){
+    console.log('ngAfterContentInit');
+      for (let e in this.labels) {
+        this.labels[e]=this.translateService.get(e);
+      }
+    console.log(this.labels.edit);
+  }
 
 	ngOnDestroy() {
 	this.sub.unsubscribe();
@@ -88,6 +107,18 @@ export class EntityComponent implements OnInit, OnDestroy {
 //    console.log(this.select);
   }
 
+  translateHeaders(){
+    this.headers = this.headers.map(
+        h => {h.d = this.translateService.get(h.name); return h;}
+      )
+  }
+
+  getDisplayHeaders(){
+    this.dheaders = this.headers.filter(
+      h => (h.name !== 'id' && h.name !== 'ts') 
+      );
+  }
+
   getForeigners(){
     let restParams: any = {};
     let enumTableName: string = 'enums';
@@ -119,6 +150,7 @@ export class EntityComponent implements OnInit, OnDestroy {
     //console.log(this.item);
   } 
 
+
     get(path: string, id: string) {
       let restParams: any = {};
       restParams.id = id;
@@ -135,13 +167,15 @@ export class EntityComponent implements OnInit, OnDestroy {
     getHeaders(path: string) {
       this.restService.getHeaders(path)
           .then(
-            (d:any) => {this.headers = d.data.columns; 
+            d => {this.headers = d.data.columns; 
                 console.log(this.headers);
                    this.checkSelect();
                    if (this.editMode !== 'new') {
                      this.get(this.mode, this.id);
                    };
                    this.getForeigners();
+                   this.translateHeaders();
+                   this.getDisplayHeaders();
               }           
             )
           .catch((message:string) => {this.errorMessage = message});

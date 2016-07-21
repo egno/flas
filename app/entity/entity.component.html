@@ -21,25 +21,25 @@
     </style>
 
     <div>
-	<div><a (click)="onGo(mode)">{{mode}}</a></div>
+	<div><a (click)="onGo(mode)">{{dmode}}</a></div>
 	<div>
-			<button type="button" class="btn btn-default btn-xs" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">Edit</button>
-			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">Save</button>
-			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode !== 'new'"[class.disabled]="!item" (click)="onDelete(item)">Del</button>
+			<button type="button" class="btn btn-default btn-xs" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">{{labels.Edit}}</button>
+			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">{{labels.Save}}</button>
+			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode !== 'new'"[class.disabled]="!item" (click)="onDelete(item)">{{labels.Del}}</button>
 	</div>
 	<div>
 		<table *ngIf="item" class="table table-striped table-condensed table-hover">
 			<tbody>
-				<tr *ngFor="let h of headers" >
+				<tr *ngFor="let h of dheaders" >
 					<td>
-						{{h.name}}
+						{{h.d}}
 					</td>
 					<td >
-						<div *ngIf="!editMode || h.name === 'id'">
+						<div *ngIf="!editMode || h.name === 'id' || h.name === 'ts'">
 							<div *ngIf="!h.references"> {{item[h.name]}} </div>
 							<div *ngIf="h.references && item[h.name] && item[h.name] !== null"> {{item[h.name].d}} </div>
 						</div>
-						<div *ngIf="editMode && h.name !== 'id'">
+						<div *ngIf="editMode && h.name !== 'id' && h.name !== 'ts'">
 							<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
 
 							<select *ngIf="h.references && h.references.table === 'enums' && foreigners[h.name] && foreigners[h.name].list"  [ngModel]="item[h.name] | json" (ngModelChange)="item[h.name]=parseEvent($event)">
