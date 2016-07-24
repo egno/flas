@@ -5,13 +5,14 @@ import {
 
 import { RestService }     from '../rest/rest.service';
 import { NavigationService }     from '../navigation/navigation.service';
+import { TranslateService }  from '../translate/translate.service';
 
 import appGlobals = require('../globals');
 
 @Component({
   selector: 'app-nav',
   directives: [ROUTER_DIRECTIVES],
-  providers: [RestService, NavigationService],
+  providers: [RestService, NavigationService, TranslateService],
   templateUrl: '/app/navigation/navigation.component.html'
 })
 
@@ -19,7 +20,8 @@ export class AppNav implements OnInit {
   menu: Array<any> = JSON.parse(appGlobals.menu);
 
   constructor(
-      private navigationService: NavigationService
+      private navigationService: NavigationService,
+      private translateService: TranslateService
       ) {}
 
   ngOnInit(){
@@ -34,7 +36,10 @@ export class AppNav implements OnInit {
   updateMenu(d: any[]){
     d.map( 
         item => { 
-            if (item.caption) {this.menu.push(item)} ;
+            if (item.caption) {
+                item.caption = this.translateService.get(item.caption);
+               this.menu.push(item);
+             } ;
         }
     )
   }

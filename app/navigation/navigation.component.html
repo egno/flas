@@ -2,5 +2,4 @@
 <nav class="list-group panel">
 	<a *ngFor="let item of menu" class="list-group-item" [routerLink]="item.params">{{item.caption}}</a>
 	<a class="list-group-item" [routerLink]="['/about']">О системе</a>
-	<a class="list-group-item" [routerLink]="['/l','settings']">Настройки</a>
 </nav>
