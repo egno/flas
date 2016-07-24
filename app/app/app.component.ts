@@ -1,10 +1,12 @@
 import { Component }	from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 
+import {AppNav} from '../navigation/navigation.component';
+
 @Component({
     selector: 'flap',
     templateUrl: 'app/app/app.component.html', 
-    directives: [ ROUTER_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, AppNav],
 })
 
 
