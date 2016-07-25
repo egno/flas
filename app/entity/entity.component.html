@@ -21,9 +21,10 @@
     </style>
 
     <div>
-	<div><a (click)="onGo(mode)">{{dmode}}</a></div>
+	<h3><div><a (click)="onGo(mode)">{{dmode}}</a></div></h3>
 	<div>
 			<button type="button" class="btn btn-default btn-xs" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">{{labels.Edit}}</button>
+			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode" [class.disabled]="!item" (click)="onCancel(item)">{{labels.Cancel}}</button>
 			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">{{labels.Save}}</button>
 			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode !== 'new'"[class.disabled]="!item" (click)="onDelete(item)">{{labels.Del}}</button>
 	</div>
@@ -32,7 +33,7 @@
 			<tbody>
 				<tr *ngFor="let h of dheaders" >
 					<td>
-						{{h.d}}
+						<strong>{{h.d}}</strong>
 					</td>
 					<td >
 						<div *ngIf="!editMode || h.name === 'id' || h.name === 'ts'">
@@ -63,7 +64,7 @@
 		<div class="select-list">
 			<div >
 				<div >
-					<div class="select-header">SELECT</div>
+					<div class="select-header">Выберите значение</div>
 					<listpage [imode]="refmode" (selectEvent)="onSelectValue(refname,$event)"></listpage>
 				</div>
 			</div>

@@ -48,13 +48,14 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
       this.editMode = params['edit']; 
 //	   	console.log(this.mode, this.id, this.editMode);
    		this.getHeaders(this.mode);
-      this.dmode = this.translateService.get(this.mode);
+      this.dmode = this.translateService.get(this.mode,false,true);
 	 });
     this.labels.Edit='Edit';
     this.labels.Del='Del';
     this.labels.View='View';
     this.labels.Add='Add';
     this.labels.Save='Save';
+    this.labels.Cancel='Cancel';
 	}
 
   ngAfterContentInit(){
@@ -191,6 +192,10 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
       this.restService.delete(this.mode, item)
       .then((res:any) => {this.router.navigate(['/l', this.mode])})
     }
+  }
+
+  onCancel(item: string) {
+    this.router.navigate(['/l', this.mode]);
   }
 
   onSave(item: any) {

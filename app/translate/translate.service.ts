@@ -16,6 +16,8 @@ export class TranslateService {
 
     load(): Promise<any>{
         appGlobals.dictionary = JSON.parse(`{
+            "Select":{"d":"Выбрать"}, 
+            "Cancel":{"d":"Отменить"}, 
             "Edit":{"d":"Изменить"}, 
             "Del":{"d":"Удалить"},
             "View":{"d":"Просмотр"},

@@ -1,5 +1,5 @@
 <div>
-	<h3>{{dmode}} {{modal}}</h3>
+	<h3>{{dmode}} <div *ngIf="modal">(выбор)</div></h3>
 	<div *ngIf="!modal">
 			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onView(selectedItem)">{{labels.View}}</button>
 			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onEdit(selectedItem)">{{labels.Edit}}</button>
@@ -7,8 +7,8 @@
 			<button type="button" class="btn btn-default btn-sm" (click)="onAdd()">{{labels.Add}}</button>
 	</div>
 	<div *ngIf="modal">
-			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onSelectAndClose(selectedItem)">Select</button>
-			<button type="button" class="btn btn-default btn-sm" (click)="onClose()">Cancel</button>
+			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onSelectAndClose(selectedItem)">{{labels.Select}}</button>
+			<button type="button" class="btn btn-default btn-sm" (click)="onClose()">{{labels.Cancel}}</button>
 	</div>
 	<div>
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page <= 1" (click)="onFirst()"> << </button> 

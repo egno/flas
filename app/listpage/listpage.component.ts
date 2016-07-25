@@ -58,6 +58,8 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
    		this.getHeaders(this.mode);
       this.dmode = this.translateService.get(this.mode,true,true);
    });
+    this.labels.Select='Select';
+    this.labels.Cancel='Cancel';
     this.labels.Edit='Edit';
     this.labels.Del='Del';
     this.labels.View='View';
