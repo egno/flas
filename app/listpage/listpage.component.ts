@@ -45,7 +45,6 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
 	  	) {}
 
 	ngOnInit() {
-    console.log('ngOnInit');
 	this.sub = this.route.params.subscribe(params => {
       if (this.imode) {
         this.modal = 'modal';
@@ -64,18 +63,15 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
     this.labels.Del='Del';
     this.labels.View='View';
     this.labels.Add='Add';
-    console.log(this.dmode);
 	}
 
   ngAfterContentInit(){
-    console.log('ngAfterContentInit');
       for (let e in this.labels) {
         this.labels[e]=this.translateService.get(e,false,true);
       }
     this.dmode = this.translateService.firstLetterToUpper(
       this.translateService.get(this.mode,true,true)
       );
-    console.log(this.dmode);
   }
 
 	ngOnDestroy() {
@@ -133,6 +129,10 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
     this.get(this.mode);
   }
 
+  onRefresh() {
+    this.get(this.mode);
+  }
+
 
   translateHeaders(){
     this.headers = this.headers.map(
@@ -142,7 +142,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
 
   getDisplayHeaders(){
     this.dheaders = this.headers.filter(
-      h => (h.name !== 'id' && h.name !== 'ts') 
+      h => (h.name !== 'id' && h.name !== 'ts' && h.type !== 'json' && h.type !== 'jsonb') 
       );
   }
 
@@ -169,10 +169,10 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
     this.select = this.headers.map(i => {return <string>
       (i.references) ? `${i.name}{id,d}` : i.name;
     });
-    console.log(this.select);
   }
 
   get(path: string) {
+      let filter: string;
       let restParams: any = {};
       this.selectedItem='';
       this.page = (this.page <1)? 1 : this.page;
@@ -181,6 +181,25 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       restParams.count = this.count;
       restParams.order = this.order.toString();
       restParams.select = this.select.toString();
+      for (var h of this.headers) {
+        switch (h.type) {
+          case 'numeric':
+          case 'date':
+            filter = `${h.name}=eq.${h.filter}`
+            break;
+          default: 
+            filter = `${h.name}=ilike.${h.filter}*`
+        }
+        
+        if (h.filter && h.filter !== '') {
+          //h.filter=h.filter.replace(' ','*')
+          if (!restParams.where) {
+            restParams.where = restParams.where + '&'+ filter;
+          } else {
+            restParams.where = filter
+          }
+        }
+      };
        this.restService.get(path, restParams)
           .then(
             d => {
@@ -189,7 +208,6 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
                 this.start=d.start; 
                 this.end=d.end; 
                 this.pages= ~~((this.total-1) / this.count) + 1;
-                console.log(this.data);
                 }           
             )
           .catch(message => {this.errorMessage = message; this.page=1; this.pages=1});

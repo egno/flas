@@ -14,7 +14,10 @@ export class NavigationService {
 	 ) {}
 
 	get(): Promise<any> {
-        return this.restService.get(this.path)
+      let restParams: any = {};
+      restParams.count = 0;
+      restParams.order = 'code';
+        return this.restService.get(this.path, restParams)
           .then(d=>this.extractData(d.data));
     }
 
@@ -30,7 +33,6 @@ export class NavigationService {
                         return item;
                     }
                     )
-    console.log(resultSet);
     return resultSet;
   }
 

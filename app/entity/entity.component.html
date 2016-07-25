@@ -37,11 +37,24 @@
 					</td>
 					<td >
 						<div *ngIf="!editMode || h.name === 'id' || h.name === 'ts'">
-							<div *ngIf="!h.references"> {{item[h.name]}} </div>
+							<div *ngIf="!h.references">
+								<div *ngIf="h.type !== 'json' && h.type !== 'jsonb'">
+									{{item[h.name]}} 									
+								</div>
+								<div *ngIf="h.type === 'json' || h.type === 'jsonb'">
+									{{item[h.name] | json}} 
+								</div>
+							</div>
 							<div *ngIf="h.references && item[h.name] && item[h.name] !== null"> {{item[h.name].d}} </div>
 						</div>
 						<div *ngIf="editMode && h.name !== 'id' && h.name !== 'ts'">
-							<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
+							<div *ngIf="h.type !== 'json' && h.type !== 'jsonb'">
+								<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
+							</div>
+							<div *ngIf="h.type === 'json' || h.type === 'jsonb'">
+								{{item[h.name] | json}}
+							</div>
+							
 
 							<select *ngIf="h.references && h.references.table === 'enums' && foreigners[h.name] && foreigners[h.name].list"  [ngModel]="item[h.name] | json" (ngModelChange)="item[h.name]=parseEvent($event)">
 								<option *ngIf="h.nullable" [value]="null"> - </option>

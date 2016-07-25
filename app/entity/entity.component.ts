@@ -59,11 +59,11 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
 	}
 
   ngAfterContentInit(){
-    console.log('ngAfterContentInit');
+//    console.log('ngAfterContentInit');
       for (let e in this.labels) {
         this.labels[e]=this.translateService.get(e, false, true);
       }
-    console.log(this.labels.edit);
+//    console.log(this.labels.edit);
   }
 
 	ngOnDestroy() {
@@ -169,7 +169,7 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
       this.restService.getHeaders(path)
           .then(
             d => {this.headers = d.data.columns; 
-                console.log(this.headers);
+//                console.log(this.headers);
                    this.checkSelect();
                    if (this.editMode !== 'new') {
                      this.get(this.mode, this.id);

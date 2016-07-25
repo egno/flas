@@ -11,6 +11,7 @@
 			<button type="button" class="btn btn-default btn-sm" (click)="onClose()">{{labels.Cancel}}</button>
 	</div>
 	<div>
+		<button type="button" class="btn btn-default btn-xs" (click)="onRefresh()">Refresh</button>
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page <= 1" (click)="onFirst()"> << </button> 
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page <= 1" (click)="onPrev(page)"> < </button> 
 		{{start}}-{{end}}/{{total}} {{page}}/{{pages}} <input [(ngModel)]="count"/>
@@ -24,6 +25,9 @@
 					<th *ngFor="let header of dheaders">
 						<div (click)="onSort(header)">{{header.d}} 
 							<span><sup>{{getOrder(header)}}</sup></span>
+						</div>
+						<div>
+							<input [(ngModel)]="header.filter" />
 						</div>
 					</th>
 				</tr>
