@@ -29,15 +29,18 @@ export class AppNav implements OnInit {
   }
 
   get(){
-    this.navigationService.get()
-      .then(d=>this.updateMenu(d));
+    this.translateService.load()
+      .then(d=>
+        this.navigationService.get()
+          .then(d=>this.updateMenuFromRest(d))
+      );
   }
 
-  updateMenu(d: any[]){
+  updateMenuFromRest(d: any[]){
     d.map( 
         item => { 
             if (item.caption) {
-                item.caption = this.translateService.get(item.caption);
+                item.caption = this.translateService.get(item.caption, true, true);
                this.menu.push(item);
              } ;
         }

@@ -60,7 +60,7 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
   ngAfterContentInit(){
     console.log('ngAfterContentInit');
       for (let e in this.labels) {
-        this.labels[e]=this.translateService.get(e);
+        this.labels[e]=this.translateService.get(e, false, true);
       }
     console.log(this.labels.edit);
   }
@@ -109,7 +109,7 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
 
   translateHeaders(){
     this.headers = this.headers.map(
-        h => {h.d = this.translateService.get(h.name); return h;}
+        h => {h.d = this.translateService.get(h.name, false, true); return h;}
       )
   }
 

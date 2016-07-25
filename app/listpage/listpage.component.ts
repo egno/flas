@@ -56,7 +56,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       }
       this.headers = [];
    		this.getHeaders(this.mode);
-      this.dmode = this.translateService.get(this.mode);
+      this.dmode = this.translateService.get(this.mode,true,true);
    });
     this.labels.Edit='Edit';
     this.labels.Del='Del';
@@ -68,9 +68,11 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   ngAfterContentInit(){
     console.log('ngAfterContentInit');
       for (let e in this.labels) {
-        this.labels[e]=this.translateService.get(e);
+        this.labels[e]=this.translateService.get(e,false,true);
       }
-    this.dmode = this.translateService.get(this.mode);
+    this.dmode = this.translateService.firstLetterToUpper(
+      this.translateService.get(this.mode,true,true)
+      );
     console.log(this.dmode);
   }
 
@@ -132,7 +134,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
 
   translateHeaders(){
     this.headers = this.headers.map(
-        h => {h.d = this.translateService.get(h.name); return h;}
+        h => {h.d = this.translateService.firstLetterToUpper(this.translateService.get(h.name)); return h;}
       )
   }
 
