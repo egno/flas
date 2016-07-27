@@ -1,32 +1,48 @@
-<div>
+    <style>
+      .seekfield {
+      	font-weight: normal;
+      	font-size: 75%;
+      }
+    </style>
+
+    <div>
 	<h3>{{dmode}} <div *ngIf="modal">(выбор)</div></h3>
-	<div *ngIf="!modal">
+	<div *ngIf="!modal" class="btn-group">
 			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onView(selectedItem)">{{labels.View}}</button>
 			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onEdit(selectedItem)">{{labels.Edit}}</button>
 			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onDelete(selectedItem)">{{labels.Del}}</button>
 			<button type="button" class="btn btn-default btn-sm" (click)="onAdd()">{{labels.Add}}</button>
 	</div>
-	<div *ngIf="modal">
+	<div *ngIf="!modal" class="btn-group">
+		<div *ngFor="let action of actions">
+			<button *ngIf="action.name" type="button" class="btn btn-default btn-sm" [class.disabled]="action.progress && action.progress === 1" (click)="onAction(action)">{{action.name}}</button>
+		</div>
+	</div>
+	<div *ngIf="modal" class="btn-group">
 			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onSelectAndClose(selectedItem)">{{labels.Select}}</button>
 			<button type="button" class="btn btn-default btn-sm" (click)="onClose()">{{labels.Cancel}}</button>
 	</div>
 	<div>
 		<button type="button" class="btn btn-default btn-xs" (click)="onRefresh()">Refresh</button>
+	<div class="btn-group">
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page <= 1" (click)="onFirst()"> << </button> 
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page <= 1" (click)="onPrev(page)"> < </button> 
+	</div>
 		{{start}}-{{end}}/{{total}} {{page}}/{{pages}} <input [(ngModel)]="count"/>
+	<div class="btn-group"> 
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page >= pages" (click)="onNext(page)"> > </button>
 		<button type="button" class="btn btn-default btn-xs" [class.disabled]="page >= pages" (click)="onLast()"> >> </button>
+	</div>
 	</div>
 	<div >
 		<table class="table table-striped table-condensed table-hover ">
 			<thead>
 				<tr>
 					<th *ngFor="let header of dheaders">
-						<div (click)="onSort(header)">{{header.d}} 
+						<div (click)="onSort(header, $event)">{{header.d}} 
 							<span><sup>{{getOrder(header)}}</sup></span>
 						</div>
-						<div>
+						<div class="seekfield">
 							<input [(ngModel)]="header.filter" />
 						</div>
 					</th>

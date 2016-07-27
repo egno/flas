@@ -3,6 +3,9 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import {AppNav} from '../navigation/navigation.component';
 
+import appGlobals = require('../globals');
+
+
 @Component({
     selector: 'flap',
     templateUrl: 'app/app/app.component.html', 
@@ -13,4 +16,5 @@ import {AppNav} from '../navigation/navigation.component';
 export class AppComponent { 
 	title = 'FLAP';
 	apiPath = '/api/v1/';
+	note = appGlobals.note;
 }

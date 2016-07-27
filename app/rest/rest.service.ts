@@ -63,7 +63,7 @@ export class RestService {
                .catch(this.handleError);
   }
 
-  post(mode: string, item: any, url?: string) {
+  post(mode: string, item?: any, url?: string) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
@@ -115,6 +115,7 @@ export class RestService {
 
   private handleError (error: any) {
     console.error('An error occurred', error);
+    appGlobals.note=error.message;
     return Promise.reject(error.message || error);
   }
 }

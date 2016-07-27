@@ -32,10 +32,12 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   pages: number = 1;
   count: number = 10;
   navpages: number[];
-  order: Array<string> = [];
+  order: any[] = [{}];
   select: Array<string> = [];
   private sub: any;
   labels: any = {};
+  actionsPath: string = 'menu';
+  actions: any[];
 
 	constructor(
 	    private route: ActivatedRoute,
@@ -53,9 +55,11 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
         this.modal = '';
 	   	  this.mode = params['mode']; 
       }
+      this.order = [{}];
       this.headers = [];
    		this.getHeaders(this.mode);
       this.dmode = this.translateService.get(this.mode,true,true);
+      this.getActions();
    });
     this.labels.Select='Select';
     this.labels.Cancel='Cancel';
@@ -122,9 +126,15 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
     this.get(this.mode);
   }
 
-  onSort(header: any) {
-    this.order = this.order.filter(i => i !== header.name);
-    this.order.unshift(header.name);
+  onSort(header: any, event:any) {
+    let v: any = {};
+    v.name = header.name;
+    v.desc = this.order.reduce((r, i) => r || (i.name===v.name && !i.desc), false);
+    if (!event.ctrlKey) {
+      this.order = [{}];
+    }
+    this.order = this.order.filter(i => (i.name && i.name !== header.name));
+    this.order.push(v);
 //    console.log(this.order);
     this.get(this.mode);
   }
@@ -133,6 +143,15 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
     this.get(this.mode);
   }
 
+  onAction(action: any){
+    let restParams: any = {};
+    restParams.cond='*';
+    this.actions = this.actions.map(a => {(a === action) ? a.progress = 1: a.progress = a.progress; return a});
+    this.restService.post('rpc/'+action.proc, restParams)
+      .then( d => 
+          this.actions = this.actions.map(a => {(a === action) ? a.progress = 0: a.progress = a.progress; return a})
+        );
+  }
 
   translateHeaders(){
     this.headers = this.headers.map(
@@ -147,8 +166,8 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   getOrder(header: any) {
-    let res = this.order.findIndex(i => i === header.name);
-    if (res >= 0) {return res+1};
+    let res: number = this.order.findIndex(i => i.name === header.name);
+    if (res >= 0) {return ((this.order[res].desc)?'↑':'↓') + (res+1)}
   }
 
   onDelete(item: any) {
@@ -159,10 +178,6 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
           if (this.selectedItem === item) { this.selectedItem = null; }
         });
     }
-  }
-
-  checkSort(header: any){
-    return this.order.find(i => i === header.name);
   }
 
   checkSelect(){
@@ -179,7 +194,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       this.page = (this.page > this.pages)? this.pages : this.page;
       restParams.page = this.page;
       restParams.count = this.count;
-      restParams.order = this.order.toString();
+      restParams.order = this.order.filter(i => i.name).map(i => `${i.name}` + ((i.desc) ? '.desc' : '')).join(',');
       restParams.select = this.select.toString();
       for (var h of this.headers) {
         switch (h.type) {
@@ -188,7 +203,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
             filter = `${h.name}=eq.${h.filter}`
             break;
           default: 
-            filter = `${h.name}=ilike.${h.filter}*`
+            filter = `${h.name}=ilike.*${h.filter}*`
         }
         
         if (h.filter && h.filter !== '') {
@@ -227,4 +242,19 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
           .catch(message => {this.errorMessage = message});
       ;
     }   
+
+  getActions() {
+      let restParams: any = {};
+      restParams.where = 'path=eq.'+`${this.mode}`
+      this.actions = [{}];
+      this.restService.get(this.actionsPath, restParams)
+          .then(
+            d => {
+              this.actions = d.data[0].actions.map((a:any) => {a.name = this.translateService.get(a.name,false,true); return a});
+              }           
+            )
+          .catch(message => {this.errorMessage = message});
+      ;
+    }   
+
 }
