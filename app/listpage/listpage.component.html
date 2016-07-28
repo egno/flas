@@ -39,8 +39,9 @@
 			<thead>
 				<tr>
 					<th *ngFor="let header of dheaders">
-						<div (click)="onSort(header, $event)">{{header.d}} 
-							<span><sup>{{getOrder(header)}}</sup></span>
+						<div (click)="onSort(header, $event)">
+							<span>{{getOrder(header).sign}}</span>							<span *ngIf="getOrder(header).count > 1"><sup>{{getOrder(header).seq}}</sup></span> 
+						{{header.d}} 
 						</div>
 						<div class="seekfield">
 							<input [(ngModel)]="header.filter" />

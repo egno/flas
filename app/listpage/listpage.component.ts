@@ -166,8 +166,15 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   getOrder(header: any) {
+    let o: any = {};
     let res: number = this.order.findIndex(i => i.name === header.name);
-    if (res >= 0) {return ((this.order[res].desc)?'↑':'↓') + (res+1)}
+    if (res >= 0) {
+    	o.seq = res+1;
+	o.order = (this.order[res].desc) ? 'desc' : 'asc';
+	o.sign = (this.order[res].desc) ? '▲':'▼';
+	o.count = this.order.length;
+    };
+    return o;
   }
 
   onDelete(item: any) {
