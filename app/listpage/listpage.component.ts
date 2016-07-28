@@ -40,6 +40,9 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   actionsPath: string = 'menu';
   actions: any[];
   where: string;
+  parent: any ={};
+  parent_mode: string;
+  parent_id: string;
   dependencies: any[];
   dependenciesTable: string = 'constraint_relations';
 
@@ -53,6 +56,13 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
 	ngOnInit() {
 	this.sub = this.route.params.subscribe(params => {
       this.where = params['where']; 
+      this.parent.mode = params['parent_mode']; 
+      this.parent.dmode = params['parent_dmode']; 
+      this.parent.d = params['parent_d']; 
+      if (this.where) {
+        this.parent.id = this.where.substring(this.where.search('=')+4, this.where.length); 
+        this.parent.field = this.where.substring(0,this.where.search('='));
+      }
       if (this.imode) {
         this.modal = 'modal';
         this.mode = this.imode;
@@ -172,7 +182,9 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
 
   getDisplayHeaders(){
     this.dheaders = this.headers.filter(
-      h => (h.name !== 'id' && h.name !== 'ts' && h.type !== 'json' && h.type !== 'jsonb') 
+      h => (h.name !== 'id' && h.name !== 'ts' && h.type !== 'json' && h.type !== 'jsonb' 
+        && !(this.where && h.name === this.parent.field )
+        ) 
       );
   }
 

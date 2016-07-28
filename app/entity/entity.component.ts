@@ -154,8 +154,21 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
   getType(header: any) {
     let res: string = 'text';
 //    console.log(header.type);
-    if (header.type === 'date') {res = 'date'}; 
-    if (header.type === 'numeric' || header.type === 'int') {res = 'number'}; 
+    switch (header.type) {
+       case "numeric":
+       case "int":
+         res = 'number'
+         break;
+       case "date":
+         res = 'date'
+         break;
+       case "timestamp with time zone":
+         res = 'datetime-local'
+         break;
+       default:
+         res = 'text';
+         break;
+     } 
     return res;
   }
 

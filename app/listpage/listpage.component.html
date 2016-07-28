@@ -7,10 +7,11 @@
 
     <div>
 	<h3>{{dmode}} <div *ngIf="modal">(выбор)</div></h3>
+	<h4 *ngIf="parent && parent.dmode && parent.d"><a [routerLink]="['/l', parent.mode]">{{parent.dmode}}</a>: <a [routerLink]="['/l', parent.mode, parent.id]">{{parent.d}}</a></h4>
 	<div *ngIf="!modal && dependencies && dependencies[0]">
 		<h5>Перейти:</h5>
 		<div class="btn-group">
-				<button *ngFor="let dependency of dependencies" type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" [routerLink]="['/l', dependency.path, {'where': dependency.fld + '=eq.'+ selectedItem.id}]">{{dependency.d}}</button>
+				<button *ngFor="let dependency of dependencies" type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" [routerLink]="['/l', dependency.path, {'where': dependency.fld + '=eq.'+ selectedItem.id, 'parent_mode': mode, 'parent_dmode': dmode, 'parent_d': selectedItem.d}]">{{dependency.d}}</button>
 		</div>
 	</div>
 	<div *ngIf="!modal" >

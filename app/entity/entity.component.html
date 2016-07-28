@@ -26,7 +26,7 @@
 	<div *ngIf="dependencies && dependencies[0]">
 		<h5>Перейти:</h5>
 		<div class="btn-group">
-				<button *ngFor="let dependency of dependencies" type="button" class="btn btn-default btn-sm" [routerLink]="['/l', dependency.path, {'where': dependency.fld + '=eq.'+ item.id}]">{{dependency.d}}</button>
+				<button *ngFor="let dependency of dependencies" type="button" class="btn btn-default btn-sm" [routerLink]="['/l', dependency.path, {'where': dependency.fld + '=eq.'+ item.id, 'parent_mode': mode, 'parent_dmode': dmode, 'parent_d': item.d}]">{{dependency.d}}</button>
 		</div>
 	</div>
 	<div>
