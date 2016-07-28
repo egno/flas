@@ -27,7 +27,6 @@ export class NavigationService {
                     (i:any) => {
                         var item: any ={};
                         item.caption=i.d;
-                        item.params = [];
                         item.params = [this.listpath, i.path];
                         //console.log(item);
                         return item;

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, 
   OnInit, AfterContentInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute }       from '@angular/router';
+import { ROUTER_DIRECTIVES, Router, ActivatedRoute }       from '@angular/router';
 
 import { RestService }     from '../rest/rest.service';
 import { TranslateService }  from '../translate/translate.service';
@@ -9,6 +9,7 @@ import { TranslateService }  from '../translate/translate.service';
 @Component({
   selector: 'listpage',
   templateUrl: 'app/listpage/listpage.component.html',
+  directives: [ROUTER_DIRECTIVES],
   providers: [RestService, TranslateService],
 })
 
@@ -38,6 +39,9 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   labels: any = {};
   actionsPath: string = 'menu';
   actions: any[];
+  where: string;
+  dependencies: any[];
+  dependenciesTable: string = 'constraint_relations';
 
 	constructor(
 	    private route: ActivatedRoute,
@@ -48,6 +52,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
 
 	ngOnInit() {
 	this.sub = this.route.params.subscribe(params => {
+      this.where = params['where']; 
       if (this.imode) {
         this.modal = 'modal';
         this.mode = this.imode;
@@ -55,11 +60,13 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
         this.modal = '';
 	   	  this.mode = params['mode']; 
       }
+      delete this.dependencies;
       this.order = [{}];
       this.headers = [];
    		this.getHeaders(this.mode);
       this.dmode = this.translateService.get(this.mode,true,true);
       this.getActions();
+      this.getDependencies();
    });
     this.labels.Select='Select';
     this.labels.Cancel='Cancel';
@@ -95,11 +102,11 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   }
   
   onAdd(item: any) {
-    this.router.navigate(['/l', this.mode, 0, 'new']);
+    this.router.navigate(['/l', this.mode, 0, {'edit':'new'}]);
   }
 
   onEdit(item: any) {
-    this.router.navigate(['/l', this.mode, item.id, 'e']);
+    this.router.navigate(['/l', this.mode, item.id, {'edit':'e'}]);
   }
 
   onView(item: any) {
@@ -151,6 +158,10 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       .then( d => 
           this.actions = this.actions.map(a => {(a === action) ? a.progress = 0: a.progress = a.progress; return a})
         );
+  }
+
+  onDetail(h: any, id: string){
+    this.router.navigate(['/l', h.references.table, id]);
   }
 
   translateHeaders(){
@@ -213,6 +224,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
             filter = `${h.name}=ilike.*${h.filter}*`
         }
         
+        restParams.where = this.where;
         if (h.filter && h.filter !== '') {
           //h.filter=h.filter.replace(' ','*')
           if (!restParams.where) {
@@ -263,5 +275,21 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
           .catch(message => {this.errorMessage = message});
       ;
     }   
+
+  getDependencies(){
+    let restParams: any = {};
+    restParams.order = 'code'
+    restParams.where = 'ftbl=eq.' + `${this.mode}`;
+    this.restService.get(this.dependenciesTable, restParams)
+      .then(
+          d => 
+            this.dependencies=d.data.map(
+              (i:any) => 
+              {i.d=this.translateService.get(i.d, true, true);
+                return i
+              }
+              )
+          )
+  }
 
 }

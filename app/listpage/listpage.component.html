@@ -7,16 +7,27 @@
 
     <div>
 	<h3>{{dmode}} <div *ngIf="modal">(выбор)</div></h3>
-	<div *ngIf="!modal" class="btn-group">
-			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onView(selectedItem)">{{labels.View}}</button>
-			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onEdit(selectedItem)">{{labels.Edit}}</button>
-			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onDelete(selectedItem)">{{labels.Del}}</button>
-			<button type="button" class="btn btn-default btn-sm" (click)="onAdd()">{{labels.Add}}</button>
-	</div>
-	<div *ngIf="!modal" class="btn-group">
-		<div *ngFor="let action of actions">
-			<button *ngIf="action.name" type="button" class="btn btn-default btn-sm" [class.disabled]="action.progress && action.progress === 1" (click)="onAction(action)">{{action.name}}</button>
+	<div *ngIf="!modal && dependencies && dependencies[0]">
+		<h5>Перейти:</h5>
+		<div class="btn-group">
+				<button *ngFor="let dependency of dependencies" type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" [routerLink]="['/l', dependency.path, {'where': dependency.fld + '=eq.'+ selectedItem.id}]">{{dependency.d}}</button>
 		</div>
+	</div>
+	<div *ngIf="!modal" >
+		<h5>Действия:</h5>
+		<div class="btn-group">
+				<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onView(selectedItem)">{{labels.View}}</button>
+				<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onEdit(selectedItem)">{{labels.Edit}}</button>
+				<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onDelete(selectedItem)">{{labels.Del}}</button>
+				<button type="button" class="btn btn-default btn-sm" (click)="onAdd()">{{labels.Add}}</button>
+		</div>
+
+		<div class="btn-group">
+			<div *ngFor="let action of actions">
+				<button *ngIf="action.name" type="button" class="btn btn-default btn-sm" [class.disabled]="action.progress && action.progress === 1" (click)="onAction(action)">{{action.name}}</button>
+			</div>
+		</div>
+		
 	</div>
 	<div *ngIf="modal" class="btn-group">
 			<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onSelectAndClose(selectedItem)">{{labels.Select}}</button>
@@ -54,7 +65,7 @@
 					<td *ngFor="let h of dheaders" [class.info]="item === selectedItem">
 						<div>
 							<div *ngIf="!h.references"> {{item[h.name]}}</div>
-							<div *ngIf="h && h.references && item && item[h.name] && item[h.name] !== null"> {{item[h.name].d}}</div>
+							<a *ngIf="h && h.references && item && item[h.name] && item[h.name] !== null" (click)="onDetail(h, item[h.name].id)" [routerLink]="['/l', h.references.table, item[h.name].id]"> {{item[h.name].d}} </a>
 						</div>
 					</td>
 				</tr>

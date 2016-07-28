@@ -21,13 +21,30 @@
     </style>
 
     <div>
-	<h3><div><a (click)="onGo(mode)">{{dmode}}</a></div></h3>
-	<div>
-			<button type="button" class="btn btn-default btn-xs" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">{{labels.Edit}}</button>
-			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode" [class.disabled]="!item" (click)="onCancel(item)">{{labels.Cancel}}</button>
-			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">{{labels.Save}}</button>
-			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode !== 'new'"[class.disabled]="!item" (click)="onDelete(item)">{{labels.Del}}</button>
+	<h3><div>{{dmode}}:</div></h3>
+	<h4 *ngIf="item.d">{{item.d}}</h4>
+	<div *ngIf="dependencies && dependencies[0]">
+		<h5>Перейти:</h5>
+		<div class="btn-group">
+				<button *ngFor="let dependency of dependencies" type="button" class="btn btn-default btn-sm" [routerLink]="['/l', dependency.path, {'where': dependency.fld + '=eq.'+ item.id}]">{{dependency.d}}</button>
+		</div>
 	</div>
+	<div>
+		<h5>Действия:</h5>
+		<div class="btn-group">
+				<button type="button" class="btn btn-default btn-sm" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">{{labels.Edit}}</button>
+				<button type="button" class="btn btn-default btn-sm" *ngIf="editMode" [class.disabled]="!item" (click)="onCancel(item)">{{labels.Cancel}}</button>
+				<button type="button" class="btn btn-default btn-sm" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">{{labels.Save}}</button>
+				<button type="button" class="btn btn-default btn-sm" *ngIf="editMode !== 'new'"[class.disabled]="!item" (click)="onDelete(item)">{{labels.Del}}</button>
+		</div>		
+		<div class="btn-group" *ngIf=" editMode === 'e' ">
+			<div *ngFor="let action of actions">
+				<button *ngIf="action.name" type="button" class="btn btn-default btn-sm" [class.disabled]="action.progress && action.progress === 1" (click)="onAction(action)">{{action.name}}</button>
+			</div>
+		</div>
+</div>
+
+
 	<div>
 		<table *ngIf="item" class="table table-striped table-condensed table-hover">
 			<tbody>
@@ -45,7 +62,7 @@
 									{{item[h.name] | json}} 
 								</div>
 							</div>
-							<div *ngIf="h.references && item[h.name] && item[h.name] !== null"> {{item[h.name].d}} </div>
+							<a *ngIf="h.references &&  h.references.table && item[h.name] && item[h.name] !== null && item[h.name].id" [routerLink]="['/l', h.references.table, item[h.name].id]"> {{item[h.name].d}} </a>
 						</div>
 						<div *ngIf="editMode && h.name !== 'id' && h.name !== 'ts'">
 							<div *ngIf="h.type !== 'json' && h.type !== 'jsonb'">

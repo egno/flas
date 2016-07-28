@@ -10,7 +10,7 @@ export const routes: RouterConfig = [
   { path: 'l', redirectTo: 'about', pathMatch: 'full'},
   { path: 'l/:mode', component: ListpageComponent},
   { path: 'l/:mode/:id', component: EntityComponent},
-  { path: 'l/:mode/:id/:edit', component: EntityComponent},
+//  { path: 'l/:mode/:id/:edit', component: EntityComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

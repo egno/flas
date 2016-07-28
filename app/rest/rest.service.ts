@@ -75,8 +75,12 @@ export class RestService {
                .toPromise()
                .then(p => {
                    let url=p.headers.get('Location');
-                   let ids = url.match(/([a-f]|\d|-){36}/);
-                   return ids[0];
+                   if (url) {
+                     let ids = url.match(/([a-f]|\d|-){36}/);
+                     return ids[0];
+                   } else {
+                     return '#'
+                   }
                  })
                .catch(this.handleError);
   }

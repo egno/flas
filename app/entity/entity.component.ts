@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, AfterContentInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute }       from '@angular/router';
+import { ROUTER_DIRECTIVES, Router, ActivatedRoute }       from '@angular/router';
 import { NgForm }    from '@angular/common';
 
 import { RestService }     from '../rest/rest.service';
@@ -13,7 +13,7 @@ import { ListpageComponent }  from '../listpage/listpage.component';
   selector: 'entity',
   templateUrl: 'app/entity/entity.component.html',
   providers: [RestService, TranslateService],
-  directives: [ListpageComponent]
+  directives: [ROUTER_DIRECTIVES, ListpageComponent]
 })
 
 export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
@@ -32,6 +32,10 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
   refname: string;
   private sub: any;
   labels: any = {};
+  actionsPath: string = 'menu';
+  actions: any[];
+  dependencies: any[];
+  dependenciesTable: string = 'constraint_relations';
 
 
 	constructor(
@@ -48,6 +52,8 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
       this.editMode = params['edit']; 
 //	   	console.log(this.mode, this.id, this.editMode);
    		this.getHeaders(this.mode);
+      this.getDependencies();
+      this.getActions();
       this.dmode = this.translateService.get(this.mode,false,true);
 	 });
     this.labels.Edit='Edit';
@@ -56,6 +62,7 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
     this.labels.Add='Add';
     this.labels.Save='Save';
     this.labels.Cancel='Cancel';
+    delete this.dependencies;
 	}
 
   ngAfterContentInit(){
@@ -83,10 +90,61 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
     this.selectIsVisible = false;
   }
 
+  onDetail(h: any, id: string){
+    this.router.navigate(['/l', h.references.table, id]);
+  }
+
+  onEdit(item: any) {
+    this.router.navigate(['/l', this.mode, item.id, {'edit':'e'}]);
+  }
+
+  onDelete(item: any) {
+    if (item.id !== undefined) {
+      this.restService.delete(this.mode, item)
+      .then((res:any) => {this.router.navigate(['/l', this.mode])})
+    }
+  }
+
+  onCancel(item: string) {
+    this.router.navigate(['/l', this.mode]);
+  }
+
+  onSave(item: any) {
+    this.headers.map(h => {
+      if (h.references && item[h.name] && item[h.name] !== null) {
+         item[h.name]=item[h.name].id
+      }
+    });
+    if (item.id !== undefined) {
+      this.restService.patch(this.mode, this.item)
+        .then((res:any) => {this.router.navigate(['/l', this.mode, item.id])});
+    } else {
+      this.restService.post(this.mode, this.item)
+        .then((id:string) => {this.router.navigate(['/l', this.mode, id])});
+    }
+  }
+
+
   openSelect(h: any){
     this.refmode = h.references.table;
     this.refname = h.name;
     this.selectIsVisible = true;
+  }
+
+  onShowDependency(dependency: any){
+    this.router.navigate(['/l', dependency.path]);
+  }
+
+  onAction(action: any){
+    let restParams: any = {};
+    restParams.cond=this.item.id;
+    this.actions = this.actions.map(a => {(a === action) ? a.progress = 1: a.progress = a.progress; return a});
+    this.restService.post('rpc/'+action.proc, restParams)
+      .then( d => {
+          this.actions = this.actions.map(a => {(a === action) ? a.progress = 0: a.progress = a.progress; return a});
+          this.get(this.mode, this.id)
+          }
+        );
   }
 
   parseEvent(event: string){
@@ -118,6 +176,22 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
     this.dheaders = this.headers.filter(
       h => (h.name !== 'id' && h.name !== 'ts') 
       );
+  }
+
+  getDependencies(){
+    let restParams: any = {};
+    restParams.order = 'code'
+    restParams.where = 'ftbl=eq.' + `${this.mode}`;
+    this.restService.get(this.dependenciesTable, restParams)
+      .then(
+          d => 
+          this.dependencies=d.data.map(
+            (i:any) => 
+            {i.d=this.translateService.get(i.d, true, true);
+              return i
+            }
+            )
+          );
   }
 
   getForeigners(){
@@ -155,7 +229,7 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
     get(path: string, id: string) {
       let restParams: any = {};
       restParams.id = id;
-      restParams.select = this.select.toString();
+      restParams.select = (this.select) ? this.select.toString() : '';
       return this.restService.get(path, restParams)
           .then(
             (d:any) => {this.item = d.data[0];
@@ -183,34 +257,18 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
       ;
     }  
 
-  onEdit(item: any) {
-    this.router.navigate(['/l', this.mode, item.id, 'e']);
-  }
-
-  onDelete(item: any) {
-    if (item.id !== undefined) {
-      this.restService.delete(this.mode, item)
-      .then((res:any) => {this.router.navigate(['/l', this.mode])})
-    }
-  }
-
-  onCancel(item: string) {
-    this.router.navigate(['/l', this.mode]);
-  }
-
-  onSave(item: any) {
-    this.headers.map(h => {
-      if (h.references && item[h.name] && item[h.name] !== null) {
-         item[h.name]=item[h.name].id
-      }
-    });
-    if (item.id !== undefined) {
-      this.restService.patch(this.mode, this.item)
-        .then((res:any) => {this.router.navigate(['/l', this.mode, item.id])});
-    } else {
-      this.restService.post(this.mode, this.item)
-        .then((id:string) => {this.router.navigate(['/l', this.mode, id])});
-    }
-  }
+  getActions() {
+      let restParams: any = {};
+      restParams.where = 'path=eq.'+`${this.mode}`
+      this.actions = [{}];
+      this.restService.get(this.actionsPath, restParams)
+          .then(
+            d => {
+              this.actions = d.data[0].actions.map((a:any) => {a.name = this.translateService.get(a.name,false,true); return a});
+              }           
+            )
+          .catch(message => {this.errorMessage = message});
+      ;
+    }   
 
 }
