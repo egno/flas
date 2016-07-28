@@ -78,6 +78,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       this.getActions();
       this.getDependencies();
    });
+    this.labels.Refresh='Refresh';
     this.labels.Select='Select';
     this.labels.Cancel='Cancel';
     this.labels.Edit='Edit';
@@ -225,6 +226,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       restParams.page = this.page;
       restParams.count = this.count;
       restParams.order = this.order.filter(i => i.name).map(i => `${i.name}` + ((i.desc) ? '.desc' : '')).join(',');
+      restParams.order = restParams.order || 'd'
       restParams.select = this.select.toString();
       for (var h of this.headers) {
         switch (h.type) {
