@@ -1,6 +1,3 @@
-# FLAP - free libre accounting platform
+# FLAS - free libre accounting system
 
-FLAS - free libre accounting system
-
-Based on Angular 2 QuickStart Source
-
+Web client is based on the Angular 2 demo and it use a FLAP - free libre accounting platform
