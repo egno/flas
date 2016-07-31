@@ -59,7 +59,7 @@
 									{{item[h.name]}} 									
 								</div>
 								<div *ngIf="h.type === 'json' || h.type === 'jsonb'">
-									{{item[h.name] | json}} 
+									<json-view [data]="item[h.name]"></json-view> 
 								</div>
 							</div>
 							<a *ngIf="h.references &&  h.references.table && item[h.name] && item[h.name] !== null && item[h.name].id" [routerLink]="['/l', h.references.table, item[h.name].id]"> {{item[h.name].d}} </a>
