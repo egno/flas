@@ -54,4 +54,27 @@ import { KeysPipe } from '../pipe/json.pipe'
 
 export class JsonViewComponent {
   @Input() data: any;
+  @Input() editMode: string;
+
+    getType(header: any) {
+    let res: string = 'text';
+//    console.log(header.type);
+    switch (header.type) {
+       case "numeric":
+       case "int":
+         res = 'number'
+         break;
+       case "date":
+         res = 'date'
+         break;
+       case "timestamp with time zone":
+         res = 'datetime-local'
+         break;
+       default:
+         res = 'text';
+         break;
+     } 
+    return res;
+  }
+
 }

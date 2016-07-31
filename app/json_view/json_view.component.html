@@ -6,13 +6,18 @@
       	margin-left: 1em;
       }
 </style>
-<div *ngFor="let item of data | keys" class='inline'>
-	<span class='caption'>{{item.key}}</span>: <span *ngIf="item.type !== null">
-		<span *ngIf="item.type !== 'object'">
-			{{item.value}}
+<div *ngIf="!editMode">
+	<div *ngFor="let item of data | keys" class='inline'>
+		<span class='caption'>{{item.key}}</span>: <span *ngIf="item.type !== null">
+			<span *ngIf="item.type !== 'object'">
+				{{item.value}}
+			</span>
+			<div *ngIf="item.type === 'object'" class="shift">
+				<json-view [data]="item.value" [editMode]="editMode"></json-view>
+			</div>	
 		</span>
-		<div *ngIf="item.type === 'object'" class="shift">
-			<json-view [data]="item.value"></json-view>
-		</div>	
-	</span>
+	</div>
+</div>
+<div *ngIf="editMode">
+	<textarea>{{data | json}}</textarea>
 </div>

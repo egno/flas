@@ -59,7 +59,7 @@
 									{{item[h.name]}} 									
 								</div>
 								<div *ngIf="h.type === 'json' || h.type === 'jsonb'">
-									<json-view [data]="item[h.name]"></json-view> 
+									<json-view [data]="item[h.name]" [editMode]="editMode"></json-view> 
 								</div>
 							</div>
 							<a *ngIf="h.references &&  h.references.table && item[h.name] && item[h.name] !== null && item[h.name].id" [routerLink]="['/l', h.references.table, item[h.name].id]"> {{item[h.name].d}} </a>
@@ -69,7 +69,7 @@
 								<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
 							</div>
 							<div *ngIf="h.type === 'json' || h.type === 'jsonb'">
-									<json-view [data]="item[h.name]"></json-view> 
+									<json-view [data]="item[h.name]" [editMode]="editMode"></json-view> 
 							</div>
 							
 
