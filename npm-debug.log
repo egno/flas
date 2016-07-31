@@ -7,7 +7,7 @@
 6 silly lifecycle flap@0.0.1~prestart: no script for prestart, continuing
 7 info lifecycle flap@0.0.1~start: flap@0.0.1
 8 verbose lifecycle flap@0.0.1~start: unsafe-perm in lifecycle true
-9 verbose lifecycle flap@0.0.1~start: PATH: /usr/lib/node_modules/npm/bin/node-gyp-bin:/opt/proj/a2c/node_modules/.bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+9 verbose lifecycle flap@0.0.1~start: PATH: /usr/lib/node_modules/npm/bin/node-gyp-bin:/opt/proj/a2c/node_modules/.bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/oracle/11.2/client64/bin
 10 verbose lifecycle flap@0.0.1~start: CWD: /opt/proj/a2c
 11 silly lifecycle flap@0.0.1~start: Args: [ '-c', 'tsc && concurrently "tsc -w" "lite-server" ' ]
 12 silly lifecycle flap@0.0.1~start: Returned: code: 2  signal: null
