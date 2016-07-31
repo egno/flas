@@ -37,53 +37,30 @@
  *  вместе с этой программой. Если это не так, см.
  *  <http://www.gnu.org/licenses/>.
  */
-import { Component, OnInit }  from '@angular/core';
-import {
-  ROUTER_DIRECTIVES,
-} from '@angular/router';
+import { Injectable }     from '@angular/core';
 
-import { RestService }     from '../rest/rest.service';
-import { NavigationService }     from '../navigation/navigation.service';
-import { TranslateService }  from '../translate/translate.service';
+import appGlobals = require('./../globals');
 
-import appGlobals = require('../globals');
+@Injectable()
+export class SettingsService {
+	private settings = appGlobals;
 
-@Component({
-  selector: 'app-nav',
-  directives: [ROUTER_DIRECTIVES],
-  providers: [RestService, NavigationService, TranslateService],
-  templateUrl: '/app/navigation/navigation.component.html'
-})
+	get(name?: string) {
+		if (name) {
+			return this.settings[name];
+		} else {
+			return this.settings;
+		};
+	}
 
-export class AppNav implements OnInit {
-  menu: Array<any> = JSON.parse(appGlobals.menu);
+	set(val: any, name?: string) {
+		if (name) {
+			this.settings[name] = val;
+			return this.settings[name];
+		} else {
+			this.settings = val;
+			return this.settings;
+		};
+	}
 
-  constructor(
-      private navigationService: NavigationService,
-      private translateService: TranslateService
-      ) {}
-
-  ngOnInit(){
-    this.get();
-  }
-
-  get(){
-    this.translateService.load()
-      .then(d=>
-        this.navigationService.get()
-          .then(d=>this.updateMenuFromRest(d))
-      );
-  }
-
-  updateMenuFromRest(d: any[]){
-    d.map( 
-        item => { 
-            if (item.caption) {
-                item.caption = this.translateService.get(item.caption, true, true);
-               this.menu.push(item);
-             } ;
-        }
-    )
-  }
 }
-

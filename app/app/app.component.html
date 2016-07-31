@@ -1,17 +1,13 @@
 <div class="container" ng-cloak>
+	<div class="row" *ngIf="note">
+		{{note}}
+	</div>
 	<div class="row">
 			<div class="col-sm-2" id="MainMenu">
-				<div>
-					<div><h3>Menu</h3></div>
-				  <nav class="list-group panel">
-				    <a class="list-group-item" [routerLink]="['/about']">About</a>
-				    <a class="list-group-item" [routerLink]="['/l','buildings']">Buildings</a>
-				    <a class="list-group-item" [routerLink]="['/l','settings']">Settings</a>
-				  </nav>
-				 </div>
+				<app-nav></app-nav>
 			</div>
 		<div class="col-sm-10">
-			<router-outlet></router-outlet>
+			<router-outlet [apiPath]="apiPath"></router-outlet>
 		</div>
 	</div>
 </div>

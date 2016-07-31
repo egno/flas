@@ -1,33 +1,86 @@
-<div>
-	<h3 (click)="onGo(mode)">{{mode}}</h3>
-	<div>
-			<button type="button" class="btn btn-default btn-xs" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">Edit</button>
-			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">Save</button>
-			<button type="button" class="btn btn-default btn-xs" *ngIf="editMode !== 'new'"[class.disabled]="!item" (click)="onDelete(item)">Del</button>
+    <style>
+      .select-list {
+      		position: absolute;
+	        left: 0;
+	        right: 0;
+	        top: 0;
+	        bottom: 0;
+	        padding: 10;
+	        overflow: auto;
+	        background-color: white;
+		    border-width: 5;
+		    border-color: gray;
+		    border-style: solid;
+		    border-radius: 10px;
+		    padding: 5px;
+      }
+      .select-header {
+		background-color: #999;
+		width: 100%;
+      }
+    </style>
+
+    <div>
+	<h3><div>{{dmode}}:</div></h3>
+	<h4 *ngIf="item.d">{{item.d}}</h4>
+	<div *ngIf="dependencies && dependencies[0]">
+		<h5>Перейти:</h5>
+		<div class="btn-group">
+				<button *ngFor="let dependency of dependencies" type="button" class="btn btn-default btn-sm" [routerLink]="['/l', dependency.path, {'where': dependency.fld + '=eq.'+ item.id, 'parent_mode': mode, 'parent_dmode': dmode, 'parent_d': item.d}]">{{dependency.d}}</button>
+		</div>
 	</div>
+	<div>
+		<h5>Действия:</h5>
+		<div class="btn-group">
+				<button type="button" class="btn btn-default btn-sm" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">{{labels.Edit}}</button>
+				<button type="button" class="btn btn-default btn-sm" *ngIf="editMode" [class.disabled]="!item" (click)="onCancel(item)">{{labels.Cancel}}</button>
+				<button type="button" class="btn btn-default btn-sm" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">{{labels.Save}}</button>
+				<button type="button" class="btn btn-default btn-sm" *ngIf="editMode !== 'new'"[class.disabled]="!item" (click)="onDelete(item)">{{labels.Del}}</button>
+		</div>		
+		<div class="btn-group" *ngIf=" editMode === 'e' ">
+			<div *ngFor="let action of actions">
+				<button *ngIf="action.name" type="button" class="btn btn-default btn-sm" [class.disabled]="action.progress && action.progress === 1" (click)="onAction(action)">{{action.name}}</button>
+			</div>
+		</div>
+</div>
+
+
 	<div>
 		<table *ngIf="item" class="table table-striped table-condensed table-hover">
 			<tbody>
-				<tr *ngFor="let h of headers" >
+				<tr *ngFor="let h of dheaders" >
 					<td>
-						{{h.name}}
+						<strong>{{h.d}}</strong>
 					</td>
 					<td >
-						<div *ngIf="!editMode || h.name === 'uuid'">
-							<div *ngIf="!h.references"> {{item[h.name]}} </div>
-							<div *ngIf="h.references && item[h.name] && item[h.name] !== null"> {{item[h.name].d}} </div>
+						<div *ngIf="!editMode || h.name === 'id' || h.name === 'ts'">
+							<div *ngIf="!h.references">
+								<div *ngIf="h.type !== 'json' && h.type !== 'jsonb'">
+									{{item[h.name]}} 									
+								</div>
+								<div *ngIf="h.type === 'json' || h.type === 'jsonb'">
+									{{item[h.name] | json}} 
+								</div>
+							</div>
+							<a *ngIf="h.references &&  h.references.table && item[h.name] && item[h.name] !== null && item[h.name].id" [routerLink]="['/l', h.references.table, item[h.name].id]"> {{item[h.name].d}} </a>
 						</div>
-						<div *ngIf="editMode && h.name !== 'uuid'">
-							<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
+						<div *ngIf="editMode && h.name !== 'id' && h.name !== 'ts'">
+							<div *ngIf="h.type !== 'json' && h.type !== 'jsonb'">
+								<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
+							</div>
+							<div *ngIf="h.type === 'json' || h.type === 'jsonb'">
+								{{item[h.name] | json}}
+							</div>
+							
 
-							<select *ngIf="h.references && h.references.table === 'enums' && foreigners[h.name] && foreigners[h.name].list" [ngModel]="item[h.name] | json" (ngModelChange)="item[h.name]=parseEvent($event)">
-								<option [value]="null"> - </option>
+							<select *ngIf="h.references && h.references.table === 'enums' && foreigners[h.name] && foreigners[h.name].list"  [ngModel]="item[h.name] | json" (ngModelChange)="item[h.name]=parseEvent($event)">
+								<option *ngIf="h.nullable" [value]="null"> - </option>
 								<option *ngFor="let l of foreigners[h.name].list" [value]="l | json">{{l.d}}</option>
 							</select>
 
-							<div *ngIf="h.references && h.references.table !== 'enums' && foreigners[h.name] && foreigners[h.name].list">
-								<input *ngIf="item[h.name] !== null" readonly="readonly" [type]="getType(h)" [ngModel]="item[h.name].d" />
-								<button *ngIf="h.references" type="button" class="btn btn-default btn-xs" (click)="openSelect()" >Change</button>
+							<div *ngIf="h.references && h.references.table !== 'enums'">
+								<input *ngIf="item[h.name] !== null && item[h.name] && item[h.name].d" readonly="readonly" [type]="getType(h)" [ngModel]="item[h.name].d" />
+								<button *ngIf="h.references" type="button" class="btn btn-default btn-xs" (click)="openSelect(h)" >Change</button>
 							</div>
 						</div>
 					</td>
@@ -37,12 +90,12 @@
 	</div>
 </div>
 <div >
-	<div *ngIf="selectIsVisible" >
-		<div >
+	<div *ngIf="selectIsVisible && refmode" >
+		<div class="select-list">
 			<div >
 				<div >
-					SELECT
-					<listpage [mode]="'buildings'" (selectEvent)="onSelectValue('parent',$event)"></listpage>
+					<div class="select-header">Выберите значение</div>
+					<listpage [imode]="refmode" (selectEvent)="onSelectValue(refname,$event)"></listpage>
 				</div>
 			</div>
 		</div>

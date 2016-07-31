@@ -37,53 +37,80 @@
  *  вместе с этой программой. Если это не так, см.
  *  <http://www.gnu.org/licenses/>.
  */
-import { Component, OnInit }  from '@angular/core';
-import {
-  ROUTER_DIRECTIVES,
-} from '@angular/router';
+import { Injectable }     from '@angular/core';
 
 import { RestService }     from '../rest/rest.service';
-import { NavigationService }     from '../navigation/navigation.service';
-import { TranslateService }  from '../translate/translate.service';
 
-import appGlobals = require('../globals');
+import appGlobals = require('./../globals');
 
-@Component({
-  selector: 'app-nav',
-  directives: [ROUTER_DIRECTIVES],
-  providers: [RestService, NavigationService, TranslateService],
-  templateUrl: '/app/navigation/navigation.component.html'
-})
+@Injectable()
+export class TranslateService {
+	private path: string = 'translate';
+    private isLoaded: number;
 
-export class AppNav implements OnInit {
-  menu: Array<any> = JSON.parse(appGlobals.menu);
+	constructor (
+		private restService: RestService
+	 ) 
+    {}
 
-  constructor(
-      private navigationService: NavigationService,
-      private translateService: TranslateService
-      ) {}
+    load(): Promise<any>{
+        appGlobals.dictionary = JSON.parse(`{
+            "Refresh":{"d":"Обновить"}, 
+            "Select":{"d":"Выбрать"}, 
+            "Cancel":{"d":"Отменить"}, 
+            "Edit":{"d":"Изменить"}, 
+            "Del":{"d":"Удалить"},
+            "View":{"d":"Просмотр"},
+            "Save":{"d":"Сохранить"},
+            "Add":{"d":"Добавить"}
+            }`);
+        return this.restService.get(this.path)
+          .then(d=>this.extractData(d.data));
+    }
 
-  ngOnInit(){
-    this.get();
+  private extractData(res: any[]) {
+
+    res.map(
+            (i:any) => {
+                var n: any = i.j;
+                for (var key in n) {
+                    appGlobals.dictionary[key]=n[key];
+                }
+            }
+        )
   }
 
-  get(){
-    this.translateService.load()
-      .then(d=>
-        this.navigationService.get()
-          .then(d=>this.updateMenuFromRest(d))
-      );
-  }
-
-  updateMenuFromRest(d: any[]){
-    d.map( 
-        item => { 
-            if (item.caption) {
-                item.caption = this.translateService.get(item.caption, true, true);
-               this.menu.push(item);
-             } ;
+	get(name: string, plural?: boolean, upper?: boolean): string {
+        if (!appGlobals.dictionary) {
+            this.load()
         }
-    )
-  }
-}
+        if (upper == true) {
+            return this.firstLetterToUpper(this.translate(name, plural))
+        } else {
+            return this.translate(name, plural)
+        }
+    }
 
+    private translate(name: string, plural?: boolean): string {
+        if (appGlobals.dictionary[name]) {
+            if (plural && plural == true && appGlobals.dictionary[name].plural) {
+                return appGlobals.dictionary[name].plural
+            } else {
+                return appGlobals.dictionary[name].d
+            }
+        } else {
+            return this.firstLetterToUpper(name.replace('_',' '));
+        }
+	}
+
+    firstLetterToUpper(str: string): string {
+    if (str == null)
+        return null;
+ 
+    if (str.length > 1)
+        return str[0].toUpperCase() + str.substring(1);
+ 
+    return str.toUpperCase();
+    }
+
+}

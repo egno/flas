@@ -1,6 +1,12 @@
 <div>
 	<h3>About</h3>
-	<div>Version: {{config.version}}</div>
+	<h4>Client settings</h4>
+	<ul>
+		<li><span>version:</span> {{config.version}}</li>
+		<li><span>API path:</span> <input [(ngModel)]="config.api"/>
+			<button type="button" class="btn btn-default btn-xs" (click)="onSave('api')">Save</button>
+		</li>
+	</ul>
 </div>
 <div>
 	<h4>Server settings</h4>
@@ -11,9 +17,13 @@
 	<ul>
 		  <li *ngFor="let item of settings">
 		    <span>
-		      <span>{{item.name}}:</span> {{item.value}}
+		      <span>{{item.d}}:</span> {{item.value}}
 		    </span>
 		  </li>
 	</ul>
-
+	<h3>О платформе</h3>
+<ul>
+	<li><a href="https://github.com/egno/flas/wiki">Wiki</a></li>
+	<li><a href="https://egno.github.io">Об авторе</a></li>
+</ul>
 </div>
