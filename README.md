@@ -1,4 +1,4 @@
-# FLAP - free libre accounting platform
+# FLAP: The Magic Inside. - Free Libre Accounting Platform
 
 ## English
 Web client is based on the Angular 2 demo and it use a FLAP - free libre accounting platform
