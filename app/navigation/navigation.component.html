@@ -1,4 +1,3 @@
-<div><h3>Menu</h3></div>
 <nav class="list-group panel">
 	<a *ngFor="let item of menu" class="list-group-item" [routerLink]="item.params">{{item.caption}}</a>
 	<a class="list-group-item" [routerLink]="['/about']">О системе</a>

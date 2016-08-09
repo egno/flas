@@ -8,7 +8,9 @@
   var map = {
     'app':                        'app', // 'dist',
 
+      'moment': 'node_modules/moment/moment.js',
     '@angular':                   'node_modules/@angular',
+    'ng2-bootstrap':             'node_modules/ng2-bootstrap',
     'rxjs':                       'node_modules/rxjs'
   };
 

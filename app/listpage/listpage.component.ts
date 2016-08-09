@@ -43,12 +43,13 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute }       from '@angular/router
 
 import { RestService }     from '../rest/rest.service';
 import { TranslateService }  from '../translate/translate.service';
+import { DropdownButtonComponent }     from '../dropdown_button/dropdown_button.component';
 
 
 @Component({
   selector: 'listpage',
   templateUrl: 'app/listpage/listpage.component.html',
-  directives: [ROUTER_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, DropdownButtonComponent],
   providers: [RestService, TranslateService],
 })
 

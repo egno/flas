@@ -37,23 +37,54 @@
  *  вместе с этой программой. Если это не так, см.
  *  <http://www.gnu.org/licenses/>.
  */
-import { Component }	from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
 
-import {AppNav} from '../navigation/navigation.component';
-
-import appGlobals = require('../globals');
-
+import {Component, Input} from '@angular/core';
+import {CORE_DIRECTIVES} from '@angular/common';
+import {DROPDOWN_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
+import { ROUTER_DIRECTIVES, Router, ActivatedRoute }       from '@angular/router';
+ 
 
 @Component({
-    selector: 'flap',
-    templateUrl: 'app/app/app.component.html', 
-    directives: [ROUTER_DIRECTIVES, AppNav],
-  })
+  selector: 'dropdown-button',
+  directives: [ROUTER_DIRECTIVES, DROPDOWN_DIRECTIVES, CORE_DIRECTIVES],
+  template: `
+  <div class="btn-group" dropdown [(isOpen)]="status.isopen">
+    <button type="button" class="btn btn-sm" dropdownToggle [disabled]="disabled">
+      {{caption}} <span class="caret"></span>
+    </button>
+    <ul dropdownMenu role="menu" aria-labelledby="single-button">
+      <li *ngFor="let item of menuitems" role="menuitem">
+        <a class="dropdown-item" href="'#'" 
+          [routerLink]="[
+            '/l', 
+            item.path, 
+            {
+                'where': item.fld + '=eq.'+ selectedItem.id, 
+                'parent_mode': parent.mode, 
+                'parent_dmode': parent.dmode, 
+                'parent_d': selectedItem.d
+             }]">{{item.d}}</a>
+      </li>
+    </ul>
+  </div>`
+})
+export class DropdownButtonComponent {
+ @Input() caption:string;
+ @Input() disabled:boolean = false;
+ @Input() menuitems:any[];
+ @Input() parent:any;
+ @Input() selectedItem:any;
 
-
-export class AppComponent { 
-	title = 'FLAP';
-	apiPath = '/api/v1/';
-	note = appGlobals.note;
+  public status:{isopen:boolean} = {isopen: false};
+ 
+  public toggled(open:boolean):void {
+    console.log('Dropdown is now: ', open);
+  }
+ 
+  public toggleDropdown($event:MouseEvent):void {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.status.isopen = !this.status.isopen;
+  }
 }
+
