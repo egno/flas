@@ -53,7 +53,7 @@ import {JsonViewComponent} from '../json_view/json_view.component';
   selector: 'entity',
   templateUrl: 'app/entity/entity.component.html',
   providers: [RestService, TranslateService],
-  directives: [ROUTER_DIRECTIVES, ListpageComponent, JsonViewComponent]
+  directives: [ListpageComponent, JsonViewComponent]
 })
 
 export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {

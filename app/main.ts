@@ -37,11 +37,13 @@
  *  вместе с этой программой. Если это не так, см.
  *  <http://www.gnu.org/licenses/>.
  */
-import {bootstrap}    from '@angular/platform-browser-dynamic';
-import {HTTP_PROVIDERS} from '@angular/http';
 
-import {AppComponent} from './app/app.component';
-import { APP_ROUTER_PROVIDERS } from './app/app.routes';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-bootstrap(AppComponent, [HTTP_PROVIDERS, APP_ROUTER_PROVIDERS])
+//import {HTTP_PROVIDERS} from '@angular/http';
+//import { APP_ROUTER_PROVIDERS } from './app/app.routes';
+
+import { AppModule }              from './app/app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule)
 .catch(err => console.error(err));

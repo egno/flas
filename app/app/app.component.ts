@@ -40,7 +40,6 @@
 import { Component }	from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 
-import {AppNav} from '../navigation/navigation.component';
 
 import appGlobals = require('../globals');
 
@@ -48,7 +47,7 @@ import appGlobals = require('../globals');
 @Component({
     selector: 'flap',
     templateUrl: 'app/app/app.component.html', 
-    directives: [ROUTER_DIRECTIVES, AppNav],
+    directives: [ROUTER_DIRECTIVES],
   })
 
 
