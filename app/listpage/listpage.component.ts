@@ -229,6 +229,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       );
   }
 
+
   getOrder(header: any) {
     let o: any = {};
     let res: number = this.order.findIndex(i => i.name === header.name);
@@ -268,6 +269,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       restParams.order = this.order.filter(i => i.name).map(i => `${i.name}` + ((i.desc) ? '.desc' : '')).join(',');
       restParams.order = restParams.order || 'd'
       restParams.select = this.select.toString();
+      restParams.where = this.where;
       for (var h of this.headers) {
         switch (h.type) {
           case 'numeric':
@@ -277,14 +279,12 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
           default: 
             filter = `${h.name}=ilike.*${h.filter}*`
         }
-        
-        restParams.where = this.where;
         if (h.filter && h.filter !== '') {
           //h.filter=h.filter.replace(' ','*')
           if (!restParams.where) {
-            restParams.where = restParams.where + '&'+ filter;
-          } else {
             restParams.where = filter
+          } else {
+            restParams.where = restParams.where + '&'+ filter;
           }
         }
       };

@@ -54,6 +54,7 @@
 			<thead>
 				<tr>
 					<th *ngFor="let header of dheaders">
+						<div [class.text-right]="header.type === 'numeric'">
 						<div (click)="onSort(header, $event)">
 							<span>{{getOrder(header).sign}}</span>							
 							<span *ngIf="getOrder(header).count > 1"><sup>{{getOrder(header).seq}}</sup></span> 
@@ -62,6 +63,7 @@
 						<div class="seekfield">
 							<input [(ngModel)]="header.filter" />
 						</div>
+						</div>
 					</th>
 				</tr>
 			</thead>
@@ -69,7 +71,8 @@
 				<tr *ngFor="let item of data" (click)="onSelect(item)">
 					<td *ngFor="let h of dheaders" [class.info]="item === selectedItem">
 						<div>
-							<div *ngIf="!h.references"> {{item[h.name]}}</div>
+							<div *ngIf="!h.references && h.type !== 'numeric'" > {{item[h.name]}}</div>
+							<div *ngIf="!h.references && h.type === 'numeric'" class="text-right"> {{item[h.name] | number:'1.2-2'}}</div>
 							<a *ngIf="h && h.references && item && item[h.name] && item[h.name] !== null" (click)="onDetail(h, item[h.name].id)" [routerLink]="['/l', h.references.table, item[h.name].id]"> {{item[h.name].d}} </a>
 						</div>
 					</td>

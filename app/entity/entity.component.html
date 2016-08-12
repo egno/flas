@@ -66,7 +66,7 @@
 						</div>
 						<div *ngIf="editMode && h.name !== 'id' && h.name !== 'ts'">
 							<div *ngIf="h.type !== 'json' && h.type !== 'jsonb'">
-								<input *ngIf="!h.references" [type]="getType(h)" [(ngModel)]="item[h.name]"/>
+								<input *ngIf="!h.references" [type]="getType(h)" step="any" [(ngModel)]="item[h.name]"/>
 							</div>
 							<div *ngIf="h.type === 'json' || h.type === 'jsonb'">
 									<json-view [data]="item[h.name]" [editMode]="editMode"></json-view> 
