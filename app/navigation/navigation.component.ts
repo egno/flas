@@ -90,11 +90,14 @@ export class AppNav implements OnInit, OnDestroy {
       );
   }
 
+  translate(s: string){
+    return this.translateService.get(s, true, true);
+  }
+
   updateMenuFromRest(d: any[]){
     d.map( 
         item => { 
             if (item.caption) {
-                item.caption = this.translateService.get(item.caption, true, true);
                this.menu.push(item);
              } ;
         }

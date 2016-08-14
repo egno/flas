@@ -5,10 +5,36 @@
 		border-radius: 0;
 		border-left-width: 0;
 		border-right-width: 0;
+		padding: 10px 0px 10px 15px;
+		margin-top: -1px;
+	}
+	.list-group-item .list-group-caption {
+	    padding-bottom: 10px;
+	    border-style: solid;
+	    border-width: 0 1px 0 0;
+	    border-color: inherit;
+	}
+	.child-group {
+		padding-bottom: 0;
+		border-bottom: 0;
 	}
 </style>
 <nav class="list-group">
-	<a *ngFor="let item of menu" class="list-group-item " [routerLink]="item.params">{{item.caption}}</a>
+	<div *ngFor="let item of menu">
+		<a *ngIf="!item.children" class="list-group-item " [routerLink]="item.params">{{translate(item.caption)}}</a>
+		<div *ngIf="item.children" class="list-group-item child-group">
+			<div class="list-group-caption">{{translate(item.caption)}}</div>
+			<div *ngFor="let item of item.children">
+				<a *ngIf="!item.children" class="list-group-item " [routerLink]="item.params">{{translate(item.caption)}}</a>
+				<div *ngIf="item.children" class="list-group-item child-group">
+					<div class="list-group-caption">{{translate(item.caption)}}</div>
+					<div *ngFor="let item of item.children">
+						<a *ngIf="!item.children" class="list-group-item " [routerLink]="item.params">{{translate(item.caption)}}</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<a class="list-group-item" routerLink="/about">О системе</a>
 	<a class="list-group-item" routerLink="/login">{{login}}</a>
 </nav>

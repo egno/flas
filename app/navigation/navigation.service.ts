@@ -68,11 +68,30 @@ export class NavigationService {
                         var item: any ={};
                         item.caption=i.d;
                         item.params = [this.listpath, i.path];
+                        item.parent = i.parent;
+                        item.id = i.id;
                         //console.log(item);
                         return item;
                     }
                     )
-    return resultSet;
+    let menu = this.getMenuLevel(resultSet, null);
+    console.log(menu)
+    return menu;
+  }
+
+  private getMenuLevel(source: any[], id: any): any {
+    var res: any;
+    res = source.filter((i:any) => i.parent === id);
+    for(var key in res) {
+        if(res.hasOwnProperty(key)) {
+            res[key].children = this.getMenuLevel(source, res[key].id);
+        }
+    };
+    if (!res[0]) {
+      return;
+    } else {
+      return res; 
+    }
   }
 
   private handleError (error: any) {
