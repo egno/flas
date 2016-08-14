@@ -9,6 +9,7 @@ import { routing,
 
 import { AppComponent }   from '../app/app.component';
 import { AppNav } from '../navigation/navigation.component';
+import { LoginComponent }  from '../login/login.component';
 import { TestComponent }  from '../test/test.component';
 import { ListpageComponent }  from '../listpage/listpage.component';
 import { EntityComponent }  from '../entity/entity.component';
@@ -20,7 +21,8 @@ import { EntityComponent }  from '../entity/entity.component';
         AppNav,
         TestComponent,
         ListpageComponent,
-        EntityComponent
+        EntityComponent,
+        LoginComponent,
     ],
     imports:      [
         BrowserModule, 

@@ -41,12 +41,14 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { TestComponent }  from '../test/test.component';
+import { LoginComponent }  from '../login/login.component';
 import { ListpageComponent }  from '../listpage/listpage.component';
 import { EntityComponent }  from '../entity/entity.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'about', pathMatch: 'full' },
   { path: 'about', component: TestComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'l', redirectTo: 'about', pathMatch: 'full'},
   { path: 'l/:mode', component: ListpageComponent},
   { path: 'l/:mode/:id', component: EntityComponent},

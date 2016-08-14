@@ -39,15 +39,52 @@
  */
 import { Injectable }     from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
-//import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
+import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
 
 import appGlobals = require('../globals');
 
 @Injectable()
 export class RestService {
-  constructor (private http: Http) {  }
   private configUrl = appGlobals.api;  // URL to web API
+  private token: string = localStorage.getItem('token');
+  private isLoggedInSubjectSource = new Subject<string>();
+
+  constructor (private http: Http) { 
+  }
+
+  isLoggedIn$ = this.isLoggedInSubjectSource.asObservable();
+
+  setToken(token: string){
+    if (token) {
+      this.token = token;
+      localStorage.setItem('token',token);
+      this.isLoggedInSubjectSource.next('--login');
+      console.log(this.isLoggedIn$);
+    }
+  }
+
+  checkTocken(){
+     return (this.token);
+  }
+
+  delToken(){
+      this.token = '';
+      localStorage.setItem('token',this.token); 
+      this.isLoggedInSubjectSource.next('--logout');   
+      console.log(this.isLoggedIn$);
+  }
+
+  checkIsLoggedIn() {
+      let res: string;
+      try {
+          res = (this.checkTocken());
+      } catch(e) {
+
+      }
+      return res;
+  }
 
   get (path: string, params?: any, url?: string): Promise<any> {
 //    console.log(params);
@@ -70,6 +107,9 @@ export class RestService {
       parm = (typeof params.order !== 'undefined') ? ((parm.length > 0)? `${parm}&`: '') + `order=${params.order}` : parm;
       parm = (typeof params.select !== 'undefined') ? ((parm.length > 0)? `${parm}&`: '') + `select=${params.select}` : parm;
     }
+    if (this.token) {
+      headers.append('Authorization',`Bearer ${this.token}`);
+    }
     headers.append('Range-Unit', 'items');
     headers.append('Range', `${(page -1) * count}-${page * count -1}`);
     parm = (parm.length > 0) ? `?${parm}`: '';
@@ -81,8 +121,12 @@ export class RestService {
   }
 
   getHeaders (path: string, url?: string): Promise<any> {
+    let headers = new Headers();
+    if (this.token) {
+      headers.append('Authorization',`Bearer ${this.token}`);
+    }
     url = (url) ? url : this.configUrl;
-    return this.http.request(url+path, {method: 'Options'})
+    return this.http.request(url+path, {method: 'Options', headers: headers})
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);
@@ -90,6 +134,9 @@ export class RestService {
 
   patch(mode: string, item: any, url?: string) {
     let headers = new Headers();
+    if (this.token) {
+      headers.append('Authorization',`Bearer ${this.token}`);
+    }
     headers.append('Content-Type', 'application/json');
 
     url = (url) ? url : this.configUrl;
@@ -104,6 +151,9 @@ export class RestService {
 
   post(mode: string, item?: any, url?: string) {
     let headers = new Headers();
+    if (this.token) {
+      headers.append('Authorization',`Bearer ${this.token}`);
+    }
     headers.append('Content-Type', 'application/json');
 
     url = (url) ? url : this.configUrl;
@@ -126,6 +176,9 @@ export class RestService {
 
   delete(mode: string, item: any, url?: string) {
     let headers = new Headers();
+    if (this.token) {
+      headers.append('Authorization',`Bearer ${this.token}`);
+    }
     headers.append('Content-Type', 'application/json');
 
     url = (url) ? url : this.configUrl;
@@ -135,6 +188,23 @@ export class RestService {
                .delete(url, {headers: headers})
                .toPromise()
                .then(() => item)
+               .catch(this.handleError);
+  }
+
+  rpc(proc: string, params?: any, url?: string) {
+    let headers = new Headers();
+    if (this.token) {
+      headers.append('Authorization',`Bearer ${this.token}`);
+    }
+    headers.append('Content-Type', 'application/json');
+
+    url = (url) ? url : this.configUrl;
+    url = `${this.configUrl}rpc/${proc}`;
+
+    return this.http
+               .post(url, JSON.stringify(params), {headers: headers})
+               .toPromise()
+               .then(p => p)
                .catch(this.handleError);
   }
 

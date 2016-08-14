@@ -52,7 +52,6 @@ import {JsonViewComponent} from '../json_view/json_view.component';
 @Component({
   selector: 'entity',
   templateUrl: 'app/entity/entity.component.html',
-  providers: [RestService, TranslateService],
   directives: [ListpageComponent, JsonViewComponent]
 })
 

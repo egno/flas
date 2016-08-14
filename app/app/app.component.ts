@@ -40,6 +40,8 @@
 import { Component }	from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 
+import { RestService }     from '../rest/rest.service';
+import { TranslateService }  from '../translate/translate.service';
 
 import appGlobals = require('../globals');
 
@@ -47,6 +49,7 @@ import appGlobals = require('../globals');
 @Component({
     selector: 'flap',
     templateUrl: 'app/app/app.component.html', 
+  	providers: [RestService, TranslateService],
     directives: [ROUTER_DIRECTIVES],
   })
 

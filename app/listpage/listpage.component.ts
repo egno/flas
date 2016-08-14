@@ -50,7 +50,6 @@ import { DropdownButtonComponent }     from '../dropdown_button/dropdown_button.
   selector: 'listpage',
   templateUrl: 'app/listpage/listpage.component.html',
   directives: [ROUTER_DIRECTIVES, DropdownButtonComponent],
-  providers: [RestService, TranslateService],
 })
 
 export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
@@ -95,6 +94,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
 
 	ngOnInit() {
 	this.sub = this.route.params.subscribe(params => {
+      console.log(this.sub)
       this.where = params['where']; 
       this.parent.mode = params['parent_mode']; 
       this.parent.dmode = params['parent_dmode']; 

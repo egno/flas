@@ -37,68 +37,48 @@
  *  вместе с этой программой. Если это не так, см.
  *  <http://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, OnDestroy }  from '@angular/core';
-import {
-  ROUTER_DIRECTIVES,
-} from '@angular/router';
 
+import { Component, OnInit } from '@angular/core';
+import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { CORE_DIRECTIVES, FORM_DIRECTIVES } from '@angular/common';
 import { RestService }     from '../rest/rest.service';
-import { NavigationService }     from '../navigation/navigation.service';
-import { TranslateService }  from '../translate/translate.service';
 
-import appGlobals = require('../globals');
 
 @Component({
-  selector: 'app-nav',
-  directives: [ROUTER_DIRECTIVES],
-  providers: [NavigationService],
-  templateUrl: '/app/navigation/navigation.component.html'
+  selector: 'login',
+  directives: [ ROUTER_DIRECTIVES, CORE_DIRECTIVES, FORM_DIRECTIVES ],
+  templateUrl: 'app/login/login.component.html',
 })
+export class LoginComponent implements OnInit {
+  private result: string;
+  private username: string;
+  private password: string;
+  private loggedIn;
 
-export class AppNav implements OnInit, OnDestroy {
-  private menu: Array<any> = JSON.parse(appGlobals.menu);
-    private isLoggedIn = false;
-    private sub: any;
-    private login: string = 'Войти';
 
   constructor(
-      private restService: RestService,
-      private navigationService: NavigationService,
-      private translateService: TranslateService
-      ) {
-
-      this.sub = this.restService.isLoggedIn$.subscribe(val => {
-        this.get();
-       })
+    public router: Router,       
+    private restService: RestService
+) {
   }
 
-  ngOnInit(){
-    this.get();
+  ngOnInit() {
+    this.loggedIn = this.restService.checkTocken();
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
+  login(event) {
+    event.preventDefault();
+    this.restService.rpc('login', {'email': this.username, 'pass': this.password})
+      .then((p:any) => {
+        this.restService.setToken(p.json().token);
+        this.router.navigate(['']);
+      })
+      .catch(message => {this.result = message});
   }
 
-  get(){
-    this.menu = [];
-    this.login = (this.restService.checkTocken()) ? 'Выйти' : 'Войти';
-    this.translateService.load()
-      .then(d=>
-        this.navigationService.get()
-          .then(d=>this.updateMenuFromRest(d))
-      );
+  logout(){
+    this.restService.delToken();
+    this.loggedIn = '';
   }
 
-  updateMenuFromRest(d: any[]){
-    d.map( 
-        item => { 
-            if (item.caption) {
-                item.caption = this.translateService.get(item.caption, true, true);
-               this.menu.push(item);
-             } ;
-        }
-    );
-  }
 }
-

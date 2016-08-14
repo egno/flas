@@ -48,8 +48,8 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute }       from '@angular/router
   selector: 'dropdown-button',
   directives: [ROUTER_DIRECTIVES, DROPDOWN_DIRECTIVES, CORE_DIRECTIVES],
   template: `
-  <div class="btn-group" dropdown [(isOpen)]="status.isopen">
-    <button type="button" class="btn btn-sm" dropdownToggle [disabled]="disabled">
+  <div class="btn-group" role="group" dropdown [(isOpen)]="status.isopen">
+    <button type="button" class="btn btn-default btn-sm" dropdownToggle [disabled]="disabled">
       {{caption}} <span class="caret"></span>
     </button>
     <ul dropdownMenu role="menu" aria-labelledby="single-button">
