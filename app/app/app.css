@@ -18,6 +18,21 @@
     overflow-x: hidden;
  }
 
+
+table {
+    position: relative;
+}
+thead {
+    position: fixed;
+}
+tbody {
+    height: 100%;
+}
+
+thead > tr, tbody{
+    display:block;}
+
+
 .top-panel {
 	width: 100%;
 }
@@ -79,6 +94,7 @@
     transform-origin: bottom left 0;
     font-size: 80%;
     font-weight: bold;
+    visibility: visible;
 }
 
 .left-toggle:hover {
@@ -87,7 +103,13 @@
 
 .toggled .left-toggle {
     left: 18px;
+    visibility: visible;
 }
+
+.list-group-item:hover .left-toggle {
+    visibility: visible;
+}
+
 
 
 
