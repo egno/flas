@@ -1,16 +1,15 @@
-<div class="container" ng-cloak>
-	<div class="panel row text-center" >
-		<h5><a href="https://github.com/egno/flas/wiki">FLAP</a> <small>The Magic Inside! Магия внутри</small></h5>
+<div class="wrapper" [class.toggled]="menuHidden">
+	<div class="left-slider">
+		<div id="MainMenu" class="scroll">
+			<app-nav></app-nav>
+		</div>
 	</div>
-	<div class="row" *ngIf="note">
-		{{note}}
-	</div>
-	<div class="row">
-			<div class="col-sm-3" id="MainMenu">
-				<app-nav></app-nav>
+	<div class="left-toggle" (click)="toggleMenu()">{{menuCaption()}}</div>
+	<div class="main-content" ng-cloak>
+		<div class="row scroll">
+			<div class="col-lg-12 mCustomScrollBox">
+				<router-outlet></router-outlet>
 			</div>
-		<div class="col-sm-9">
-			<router-outlet></router-outlet>
 		</div>
 	</div>
 </div>

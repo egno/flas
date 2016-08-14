@@ -1,5 +1,14 @@
-<nav class="list-group panel">
-	<a *ngFor="let item of menu" class="list-group-item" [routerLink]="item.params">{{item.caption}}</a>
+<style type="">
+	.list-group-item {
+		background-color: transparent;
+		color: white;
+		border-radius: 0;
+		border-left-width: 0;
+		border-right-width: 0;
+	}
+</style>
+<nav class="list-group">
+	<a *ngFor="let item of menu" class="list-group-item " [routerLink]="item.params">{{item.caption}}</a>
 	<a class="list-group-item" routerLink="/about">О системе</a>
 	<a class="list-group-item" routerLink="/login">{{login}}</a>
 </nav>

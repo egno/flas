@@ -94,7 +94,6 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
 
 	ngOnInit() {
 	this.sub = this.route.params.subscribe(params => {
-      console.log(this.sub)
       this.where = params['where']; 
       this.parent.mode = params['parent_mode']; 
       this.parent.dmode = params['parent_dmode']; 

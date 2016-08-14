@@ -8,3 +8,201 @@
 .panel {
 	background-color: light-gray;
 }
+/*!
+ * Start Bootstrap - Simple Sidebar (http://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+ body {
+    overflow-x: hidden;
+ }
+
+.top-panel {
+	width: 100%;
+}
+
+.left-slider {
+	background-color: gray;
+	width: 250px;
+	height: 100%;
+	z-index: 1;
+	top: 0;
+	bottom: 0;
+	position: fixed;
+	overflow: hidden;
+}
+
+.scroll {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	overflow: auto;
+}
+
+.main-content {
+	position: absolute;
+	z-index: 0;
+	left: 265px;
+}
+
+.toggled .left-slider {
+	width: 3px;
+}
+
+.toggled .main-content {
+	left: 15px;
+	padding-left: 3px;
+}
+
+
+.toggled .left-slider * {
+	visibility: hidden;
+}
+
+.left-toggle {
+    z-index: 5;
+    position: fixed;
+    left:265px;
+    background-color: gray;
+    opacity: 0.4;
+    display: block;
+    text-align: center;
+    display: block;
+    border-radius: 0px 0px 10px 10px;
+    height: 1.5em;
+    width: 4em;
+    margin-left: 1px;
+    margin-top: 3em;
+    transform: rotate(-90deg);
+    color: white;
+    transform-origin: bottom left 0;
+    font-size: 80%;
+    font-weight: bold;
+}
+
+.left-toggle:hover {
+	opacity: 1;
+}
+
+.toggled .left-toggle {
+    left: 18px;
+}
+
+
+
+/* Toggle Styles */
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: #000;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #999999;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 65px;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    background: none;
+}
+
+@media(min-width:768px) {
+    #wrapper {
+        padding-left: 250px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}

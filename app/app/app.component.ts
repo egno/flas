@@ -49,6 +49,7 @@ import appGlobals = require('../globals');
 @Component({
     selector: 'flap',
     templateUrl: 'app/app/app.component.html', 
+    styleUrls: ['app/app/app.css'], 
   	providers: [RestService, TranslateService],
     directives: [ROUTER_DIRECTIVES],
   })
@@ -58,4 +59,13 @@ export class AppComponent {
 	title = 'FLAP';
 	apiPath = '/api/v1/';
 	note = appGlobals.note;
+	menuHidden: boolean = false;
+
+	toggleMenu(){
+		this.menuHidden = ! this.menuHidden;
+	}
+
+	menuCaption(){
+		return (this.menuHidden) ? 'Меню' : 'Скрыть';
+	}
 }
