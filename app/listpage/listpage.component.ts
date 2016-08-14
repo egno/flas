@@ -41,6 +41,8 @@ import { Component, Input, Output, EventEmitter,
   OnInit, AfterContentInit, OnDestroy } from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }       from '@angular/router';
 
+import { TstzPipe } from '../pipe/tstz.pipe'
+
 import { RestService }     from '../rest/rest.service';
 import { TranslateService }  from '../translate/translate.service';
 import { DropdownButtonComponent }     from '../dropdown_button/dropdown_button.component';
@@ -50,6 +52,7 @@ import { DropdownButtonComponent }     from '../dropdown_button/dropdown_button.
   selector: 'listpage',
   templateUrl: 'app/listpage/listpage.component.html',
   directives: [ROUTER_DIRECTIVES, DropdownButtonComponent],
+  pipes: [TstzPipe],
 })
 
 export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {

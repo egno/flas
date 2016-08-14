@@ -58,7 +58,8 @@ thead > tr, tbody{
 .main-content {
 	position: absolute;
 	z-index: 0;
-	left: 265px;
+    width: 100%;
+	padding-left: 265px;
 }
 
 .toggled .left-slider {
@@ -66,8 +67,7 @@ thead > tr, tbody{
 }
 
 .toggled .main-content {
-	left: 15px;
-	padding-left: 3px;
+	padding-left: 15px;
 }
 
 
@@ -109,7 +109,6 @@ thead > tr, tbody{
 .list-group-item:hover .left-toggle {
     visibility: visible;
 }
-
 
 
 
