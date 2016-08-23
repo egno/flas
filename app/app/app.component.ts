@@ -66,6 +66,6 @@ export class AppComponent {
 	}
 
 	menuCaption(){
-		return (this.menuHidden) ? 'Меню' : 'Скрыть';
+		return (this.menuHidden) ? '>>' : 'X';
 	}
 }

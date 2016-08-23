@@ -39,7 +39,7 @@ thead > tr, tbody{
 
 .left-slider {
 	background-color: gray;
-	width: 250px;
+	width: 15em;
 	height: 100%;
 	z-index: 1;
 	top: 0;
@@ -52,22 +52,31 @@ thead > tr, tbody{
 	position: relative;
 	height: 100%;
 	width: 100%;
-	overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.scroll-both {
+    height: 100%;
+    width: 100%;
+    margin-left: 0;
+    overflow: auto;
 }
 
 .main-content {
 	position: absolute;
-	z-index: 0;
     width: 100%;
-	padding-left: 265px;
+    height: 100%;
+    overflow: hidden;
+	padding-left: 15em;
 }
 
 .toggled .left-slider {
-	width: 3px;
+	width: 1em;
 }
 
 .toggled .main-content {
-	padding-left: 15px;
+	padding-left: 2em;
 }
 
 
@@ -78,23 +87,23 @@ thead > tr, tbody{
 .left-toggle {
     z-index: 5;
     position: fixed;
-    left:265px;
+    left: 248px;
+    top: 0px;
     background-color: gray;
-    opacity: 0.4;
     display: block;
     text-align: center;
     display: block;
-    border-radius: 0px 0px 10px 10px;
-    height: 1.5em;
-    width: 4em;
+    border-radius: 0px 10px 10px 0px;
+    height: 3.5em;
+    width: 2em;
     margin-left: 1px;
-    margin-top: 3em;
-    transform: rotate(-90deg);
+    margin-top: 1em;
     color: white;
-    transform-origin: bottom left 0;
-    font-size: 80%;
+    padding-top: 1em;
+    font-size: 100%;
     font-weight: bold;
-    visibility: visible;
+    opacity: 0.4;
+    visibility: hidden;
 }
 
 .left-toggle:hover {
@@ -102,15 +111,18 @@ thead > tr, tbody{
 }
 
 .toggled .left-toggle {
-    left: 18px;
+    left: 0.5em;
     visibility: visible;
 }
 
 .list-group-item:hover .left-toggle {
-    visibility: visible;
+    visibility: hidden;
 }
 
-
+.toggled .left-slider:hover .left-toggle {
+    opacity: 0.4;
+    visibility: visible;
+}
 
 /* Toggle Styles */
 
