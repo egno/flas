@@ -58,7 +58,7 @@ import { DropdownButtonComponent }     from '../dropdown_button/dropdown_button.
 export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
  
  @Input() imode:string;
- @Output() selectEvent  = new EventEmitter<string>();
+ @Output() selectEvent = new EventEmitter<string>();
 
 	mode:string;
   dmode: string;

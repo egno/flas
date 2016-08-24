@@ -37,7 +37,7 @@
  *  вместе с этой программой. Если это не так, см.
  *  <http://www.gnu.org/licenses/>.
  */
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { TranslateService }  from '../translate/translate.service';
 

@@ -18,23 +18,33 @@
 		padding-bottom: 0;
 		border-bottom: 0;
 	}
+	.active {
+		font-weight: bold;
+		background-color: #666;
+		border-color: white;
+	}
+	.active:hover {
+		background-color: #AAA;		
+		border-color: white;
+		color: #333;
+	}
 </style>
 <nav class="list-group">
 	<div *ngFor="let item of menu">
-		<a *ngIf="!item.children" class="list-group-item " [routerLink]="item.params">{{translate(item.caption)}}</a>
+		<a *ngIf="!item.children" class="list-group-item " [routerLink]="item.params" routerLinkActive="active">{{translate(item.caption)}}</a>
 		<div *ngIf="item.children" class="list-group-item child-group">
 			<div class="list-group-caption">{{translate(item.caption)}}</div>
 			<div *ngFor="let item of item.children">
-				<a *ngIf="!item.children" class="list-group-item " [routerLink]="item.params">{{translate(item.caption)}}</a>
+				<a *ngIf="!item.children" class="list-group-item " [routerLink]="item.params" routerLinkActive="active">{{translate(item.caption)}}</a>
 				<div *ngIf="item.children" class="list-group-item child-group">
 					<div class="list-group-caption">{{translate(item.caption)}}</div>
 					<div *ngFor="let item of item.children">
-						<a *ngIf="!item.children" class="list-group-item " [routerLink]="item.params">{{translate(item.caption)}}</a>
+						<a *ngIf="!item.children" class="list-group-item " [routerLink]="item.params" routerLinkActive="active">{{translate(item.caption)}}</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<a class="list-group-item" routerLink="/about">О системе</a>
-	<a class="list-group-item" routerLink="/login">{{login}}</a>
+	<a class="list-group-item" routerLink="/about" routerLinkActive="active">О системе</a>
+	<a class="list-group-item" routerLink="/login" routerLinkActive="active">{{login}}</a>
 </nav>
