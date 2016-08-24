@@ -255,7 +255,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   checkSelect(){
-    this.select = this.headers.map(i => {return <string>
+    this.select = this.headers.sort((i,j) => (j.name === 'code')?1:0).map(i => {return <string>
       (i.references) ? `${i.name}{id,d}` : i.name;
     });
   }
@@ -263,13 +263,15 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   get(path: string) {
       let filter: string;
       let restParams: any = {};
+      let defaultOrder: string = 'd';
+      if (this.headers.findIndex(i => i.name === 'code')>0) {defaultOrder = 'code,d'};
       this.selectedItem='';
       this.page = (this.page <1)? 1 : this.page;
       this.page = (this.page > this.pages)? this.pages : this.page;
       restParams.page = this.page;
       restParams.count = this.count;
       restParams.order = this.order.filter(i => i.name).map(i => `${i.name}` + ((i.desc) ? '.desc' : '')).join(',');
-      restParams.order = restParams.order || 'd'
+      restParams.order = restParams.order || defaultOrder;
       restParams.select = this.select.toString();
       restParams.where = this.where;
       for (var h of this.headers) {
