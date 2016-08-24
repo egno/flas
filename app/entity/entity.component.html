@@ -37,7 +37,7 @@
 				<button type="button" class="btn btn-default btn-sm" *ngIf="!editMode" (click)="onAdd()">{{labels.Add}}</button>
 		</div>	
 
-		<dropdown-button *ngIf="dependencies && dependencies[0]" [caption]="'Перейти к …'" [menuitems]="dependencies" [selectedItem]="item" [parent]="{'id':item.id, 'mode': mode, 'dmode': dmode, 'd': item.d}" [disabled]="!item">
+		<dropdown-button *ngIf="!editMode && dependencies && dependencies[0]" [caption]="'Перейти к …'" [menuitems]="dependencies" [selectedItem]="item" [parent]="{'id':item.id, 'mode': mode, 'dmode': dmode, 'd': item.d}" [disabled]="!item">
 		</dropdown-button>	
 		<div class="btn-group" *ngIf=" editMode === 'e' ">
 			<div *ngFor="let action of actions">
