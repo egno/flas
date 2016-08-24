@@ -46,6 +46,7 @@ thead > tr, tbody{
 	bottom: 0;
 	position: fixed;
 	overflow: hidden;
+    transition: all 0.1s linear;
 }
 
 .scroll {
