@@ -25,7 +25,7 @@
 						<button type="button" class="btn btn-default btn-sm" (click)="onAdd()">{{labels.Add}}</button>
 				</div>
 				
-				<dropdown-button *ngIf="!modal && dependencies && dependencies[0]" [caption]="'Перейти к …'" [menuitems]="dependencies" [selectedItem]="selectedItem" [parent]="{'id':selectedItem.id, 'mode': mode, 'dmode': dmode, 'd': selectedItem.d}" [disabled]="!selectedItem">
+				<dropdown-button *ngIf="!modal && dependencies && dependencies[0]" [caption]="'Перейти к …'" [menuitems]="dependencies" [selectedItem]="selectedItem" [parent]="{'id':selectedItem?.id, 'mode': mode, 'dmode': dmode, 'd': selectedItem.d}" [disabled]="!selectedItem">
 				</dropdown-button>
 
 				<div class="btn-group">

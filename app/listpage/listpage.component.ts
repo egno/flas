@@ -264,7 +264,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       let filter: string;
       let restParams: any = {};
       let defaultOrder: string = 'd';
-      if (this.headers.findIndex(i => i.name === 'code')>0) {defaultOrder = 'code,d'};
+      if (this.headers.findIndex(i => i.name === 'code') != -1) {defaultOrder = 'code,d'};
       this.selectedItem='';
       this.page = (this.page <1)? 1 : this.page;
       this.page = (this.page > this.pages)? this.pages : this.page;
