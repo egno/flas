@@ -27,20 +27,18 @@
     <div>
 	<h3><div>{{dmode}}:</div></h3>
 	<h4 *ngIf="item.d">{{item.d}}</h4>
-	<div *ngIf="dependencies && dependencies[0]">
-		<h5>Перейти:</h5>
-		<div class="btn-group">
-				<button *ngFor="let dependency of dependencies" type="button" class="btn btn-default btn-sm" [routerLink]="['/l', dependency.path, {'where': dependency.fld + '=eq.'+ item.id, 'parent_mode': mode, 'parent_dmode': dmode, 'parent_d': item.d}]">{{dependency.d}}</button>
-		</div>
-	</div>
 	<div>
-		<h5>Действия:</h5>
 		<div class="btn-group">
 				<button type="button" class="btn btn-default btn-sm" *ngIf="!editMode" [class.disabled]="!item" (click)="onEdit(item)">{{labels.Edit}}</button>
+				<button type="button" class="btn btn-default btn-sm" *ngIf="!editMode" [class.disabled]="!item" (click)="onCopy(item)">{{labels.Copy}}</button>
 				<button type="button" class="btn btn-default btn-sm" *ngIf="editMode" [class.disabled]="!item" (click)="onCancel(item)">{{labels.Cancel}}</button>
 				<button type="button" class="btn btn-default btn-sm" *ngIf="editMode" [class.disabled]="!item" (click)="onSave(item)">{{labels.Save}}</button>
 				<button type="button" class="btn btn-default btn-sm" *ngIf="editMode !== 'new'"[class.disabled]="!item" (click)="onDelete(item)">{{labels.Del}}</button>
-		</div>		
+				<button type="button" class="btn btn-default btn-sm" *ngIf="!editMode" (click)="onAdd()">{{labels.Add}}</button>
+		</div>	
+
+		<dropdown-button *ngIf="dependencies && dependencies[0]" [caption]="'Перейти к …'" [menuitems]="dependencies" [selectedItem]="item" [parent]="{'id':item.id, 'mode': mode, 'dmode': dmode, 'd': item.d}" [disabled]="!item">
+		</dropdown-button>	
 		<div class="btn-group" *ngIf=" editMode === 'e' ">
 			<div *ngFor="let action of actions">
 				<button *ngIf="action.name" type="button" class="btn btn-default btn-sm" [class.disabled]="action.progress && action.progress === 1" (click)="onAction(action)">{{action.name}}</button>

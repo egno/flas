@@ -62,7 +62,8 @@ export class TranslateService {
             "Del":{"d":"Удалить"},
             "View":{"d":"Просмотр"},
             "Save":{"d":"Сохранить"},
-            "Add":{"d":"Добавить"}
+            "Add":{"d":"Добавить"},
+            "Copy":{"d":"Копировать"}
             }`);
         return this.restService.get(this.path)
           .then(d=>this.extractData(d.data));

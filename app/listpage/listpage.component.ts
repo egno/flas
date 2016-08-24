@@ -127,6 +127,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
     this.labels.Del='Del';
     this.labels.View='View';
     this.labels.Add='Add';
+    this.labels.Copy='Copy';
 	}
 
   ngAfterContentInit(){
@@ -158,6 +159,10 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
     this.router.navigate(['/l', this.mode, 0, {'edit':'new'}]);
   }
 
+  onCopy(item: any) {
+    this.router.navigate(['/l', this.mode, item.id, {'edit':'copy'}]);
+  }
+
   onEdit(item: any) {
     this.router.navigate(['/l', this.mode, item.id, {'edit':'e'}]);
   }
@@ -172,7 +177,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onPrev(page: number = 0) {
-    this.page=1;
+    this.page-=1;
     this.get(this.mode);
   }
 

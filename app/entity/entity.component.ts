@@ -47,12 +47,13 @@ import { SelectListComponent }  from '../select_list/select_list.component';
 
 import { ListpageComponent }  from '../listpage/listpage.component';
 import {JsonViewComponent} from '../json_view/json_view.component';
+import { DropdownButtonComponent }     from '../dropdown_button/dropdown_button.component';
 
 
 @Component({
   selector: 'entity',
   templateUrl: 'app/entity/entity.component.html',
-  directives: [ListpageComponent, JsonViewComponent]
+  directives: [ListpageComponent, JsonViewComponent, DropdownButtonComponent]
 })
 
 export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
@@ -101,6 +102,7 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
     this.labels.Add='Add';
     this.labels.Save='Save';
     this.labels.Cancel='Cancel';
+    this.labels.Copy='Copy';
     delete this.dependencies;
 	}
 
@@ -144,11 +146,20 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
+  onAdd(item: any) {
+    this.router.navigate(['/l', this.mode, 0, {'edit':'new'}]);
+  }
+
+  onCopy(item: any) {
+    this.router.navigate(['/l', this.mode, item.id, {'edit':'copy'}]);
+  }
+
   onCancel(item: string) {
     this.router.navigate(['/l', this.mode]);
   }
 
   onSave(item: any) {
+    if (this.mode === 'copy') {item.id = ''};
     this.headers.map(h => {
       if (h.references && item[h.name] && item[h.name] !== null) {
          item[h.name]=item[h.name].id
