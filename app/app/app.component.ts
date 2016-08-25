@@ -62,7 +62,7 @@ export class AppComponent {
 	menuHidden: boolean = false;
 
 	toggleMenu(toggle){
-		this.menuHidden = toggle || ! this.menuHidden;
+		this.menuHidden = (toggle)? toggle : ! this.menuHidden;
 	}
 
 	menuCaption(){
