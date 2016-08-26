@@ -21,7 +21,6 @@
 	.table-nonfluid {
 	   width: auto !important;
 	}
-
     </style>
 
     <div>
@@ -55,13 +54,17 @@
 						<strong>{{h.d}}</strong>
 					</td>
 					<td >
+					 	<button *ngIf="h.type === 'json' || h.type === 'jsonb'" type="button" class="btn btn-default btn-xs" (click)="h.jsonShow = !h.jsonShow">
+							{{(h.jsonShow)?'-':'+'}}
+						</button> 
 						<div *ngIf="!editMode || h.name === 'id' || h.name === 'ts'">
 							<div *ngIf="!h.references">
 								<div *ngIf="h.type !== 'json' && h.type !== 'jsonb'">
 									{{item[h.name]}} 									
 								</div>
 								<div *ngIf="h.type === 'json' || h.type === 'jsonb'">
-									<json-view [data]="item[h.name]" [editMode]="editMode"></json-view> 
+									<json-view *ngIf="h.jsonShow" [data]="item[h.name]" [editMode]="editMode">
+									</json-view> 
 								</div>
 							</div>
 							<a *ngIf="h.references &&  h.references.table && item[h.name] && item[h.name] !== null && item[h.name].id" [routerLink]="['/l', h.references.table, item[h.name].id]"> {{item[h.name].d}} </a>
@@ -71,7 +74,8 @@
 								<input *ngIf="!h.references" [type]="getType(h)" step="any" [(ngModel)]="item[h.name]"/>
 							</div>
 							<div *ngIf="h.type === 'json' || h.type === 'jsonb'">
-									<textarea>{{item[h.name]|json}}</textarea>
+								<textarea *ngIf="h.jsonShow">{{item[h.name]|json}}
+								</textarea>
 							</div>
 							
 

@@ -76,6 +76,7 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
   actions: any[];
   dependencies: any[];
   dependenciesTable: string = 'constraint_relations';
+  jsonShow: boolean = false;
 
 
 	constructor(
