@@ -38,7 +38,8 @@
 
 		<dropdown-button *ngIf="!editMode && dependencies && dependencies[0]" [caption]="'Перейти к …'" [menuitems]="dependencies" [selectedItem]="item" [parent]="{'id':item.id, 'mode': mode, 'dmode': dmode, 'd': item.d}" [disabled]="!item">
 		</dropdown-button>	
-		<div class="btn-group" *ngIf=" editMode === 'e' ">
+
+		<div class="btn-group" >
 			<div *ngFor="let action of actions">
 				<button *ngIf="action.name" type="button" class="btn btn-default btn-sm" [class.disabled]="action.progress && action.progress === 1" (click)="onAction(action)">{{action.name}}</button>
 			</div>

@@ -38,7 +38,6 @@
  *  <http://www.gnu.org/licenses/>.
  */
 import { Component }	from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { RestService }     from '../rest/rest.service';
 import { TranslateService }  from '../translate/translate.service';
@@ -51,7 +50,6 @@ import appGlobals = require('../globals');
     templateUrl: 'app/app/app.component.html', 
     styleUrls: ['app/app/app.css'], 
   	providers: [RestService, TranslateService],
-    directives: [ROUTER_DIRECTIVES],
   })
 
 

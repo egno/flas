@@ -47,9 +47,7 @@ import { KeysPipe } from '../pipe/json.pipe'
 @Component({
   selector: 'json-view',
   templateUrl: 'app/json_view/json_view.component.html',
-  directives: [JsonViewComponent],
-  providers: [TranslateService],
-  pipes: [KeysPipe],
+  providers: [TranslateService]
 })
 
 export class JsonViewComponent {

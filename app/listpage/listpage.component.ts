@@ -39,7 +39,7 @@
  */
 import { Component, Input, Output, EventEmitter, 
   OnInit, AfterContentInit, OnDestroy } from '@angular/core';
-import { ROUTER_DIRECTIVES, Router, ActivatedRoute }       from '@angular/router';
+import {  Router, ActivatedRoute }       from '@angular/router';
 
 import { TstzPipe } from '../pipe/tstz.pipe'
 
@@ -50,9 +50,7 @@ import { DropdownButtonComponent }     from '../dropdown_button/dropdown_button.
 
 @Component({
   selector: 'listpage',
-  templateUrl: 'app/listpage/listpage.component.html',
-  directives: [ROUTER_DIRECTIVES, DropdownButtonComponent],
-  pipes: [TstzPipe],
+  templateUrl: 'app/listpage/listpage.component.html'
 })
 
 export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
@@ -173,22 +171,22 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
 
   onNext(page: number = 0) {
     this.page+=1;
-    this.get(this.mode);
+    this.getData(this.mode);
   }
 
   onPrev(page: number = 0) {
     this.page-=1;
-    this.get(this.mode);
+    this.getData(this.mode);
   }
 
   onLast() {
     this.page=this.pages;
-    this.get(this.mode);
+    this.getData(this.mode);
   }
 
   onFirst() {
     this.page=1;
-    this.get(this.mode);
+    this.getData(this.mode);
   }
 
   onSort(header: any, event:any) {
@@ -201,11 +199,11 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
     this.order = this.order.filter(i => (i.name && i.name !== header.name));
     this.order.push(v);
 //    console.log(this.order);
-    this.get(this.mode);
+    this.getData(this.mode);
   }
 
   onRefresh() {
-    this.get(this.mode);
+    this.getData(this.mode);
   }
 
   onAction(action: any){
@@ -234,6 +232,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
         && !(this.where && h.name === this.parent.field )
         ) 
       );
+     console.log(this.dheaders)
   }
 
 
@@ -261,11 +260,12 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
 
   checkSelect(){
     this.select = this.headers.sort((i,j) => (j.name === 'code')?1:0).map(i => {return <string>
-      (i.references) ? `${i.name}{id,d}` : i.name;
+      (i.references) ? `${i.name}{d,id}` : i.name;
     });
   }
 
-  get(path: string) {
+  getData(path: string) {
+    console.log('get');
       let filter: string;
       let restParams: any = {};
       let defaultOrder: string = 'd';
@@ -305,6 +305,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
                 this.start=d.start; 
                 this.end=d.end; 
                 this.pages= ~~((this.total-1) / this.count) + 1;
+                console.log(this.data);
                 }           
             )
           .catch(message => {this.errorMessage = message; this.page=1; this.pages=1});
@@ -312,11 +313,13 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
     } 
 
   getHeaders(path: string) {
+    console.log('getHeaders');
       this.restService.getHeaders(path)
           .then(
-            d => {this.headers = d.data.columns;
+            d => {this.headers = d.data;
+              console.log(this.headers);
               this.checkSelect();
-              this.get(this.mode);
+              this.getData(this.mode);
               this.translateHeaders();
               this.getDisplayHeaders();
               }           

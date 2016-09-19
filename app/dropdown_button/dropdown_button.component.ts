@@ -39,14 +39,12 @@
  */
 
 import {Component, Input} from '@angular/core';
-import {CORE_DIRECTIVES} from '@angular/common';
-import {DROPDOWN_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import { ROUTER_DIRECTIVES, Router, ActivatedRoute }       from '@angular/router';
+import { DropdownModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { Router, ActivatedRoute }       from '@angular/router';
  
 
 @Component({
   selector: 'dropdown-button',
-  directives: [ROUTER_DIRECTIVES, DROPDOWN_DIRECTIVES, CORE_DIRECTIVES],
   template: `
   <div class="btn-group" role="group" dropdown [(isOpen)]="status.isopen">
     <button type="button" class="btn btn-default btn-sm" dropdownToggle [disabled]="disabled">
@@ -68,6 +66,7 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute }       from '@angular/router
     </ul>
   </div>`
 })
+
 export class DropdownButtonComponent {
  @Input() caption:string;
  @Input() disabled:boolean = false;

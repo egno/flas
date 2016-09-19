@@ -38,8 +38,7 @@
  *  <http://www.gnu.org/licenses/>.
  */
 import { Component, Input, OnInit, AfterContentInit, OnDestroy } from '@angular/core';
-import { ROUTER_DIRECTIVES, Router, ActivatedRoute }       from '@angular/router';
-import { NgForm }    from '@angular/common';
+import { Router, ActivatedRoute }       from '@angular/router';
 
 import { RestService }     from '../rest/rest.service';
 import { TranslateService }  from '../translate/translate.service';
@@ -53,7 +52,6 @@ import { DropdownButtonComponent }     from '../dropdown_button/dropdown_button.
 @Component({
   selector: 'entity',
   templateUrl: 'app/entity/entity.component.html',
-  directives: [ListpageComponent, JsonViewComponent, DropdownButtonComponent]
 })
 
 export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
@@ -306,7 +304,7 @@ export class EntityComponent implements OnInit, AfterContentInit, OnDestroy {
     getHeaders(path: string) {
       this.restService.getHeaders(path)
           .then(
-            d => {this.headers = d.data.columns; 
+            d => {this.headers = d.data; 
 //                console.log(this.headers);
                    this.checkSelect();
                    if (this.editMode !== 'new') {

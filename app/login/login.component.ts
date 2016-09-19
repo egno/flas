@@ -39,14 +39,12 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
-import { CORE_DIRECTIVES, FORM_DIRECTIVES } from '@angular/common';
+import { Router } from '@angular/router';
 import { RestService }     from '../rest/rest.service';
 
 
 @Component({
   selector: 'login',
-  directives: [ ROUTER_DIRECTIVES, CORE_DIRECTIVES, FORM_DIRECTIVES ],
   templateUrl: 'app/login/login.component.html',
 })
 export class LoginComponent implements OnInit {

@@ -16,7 +16,7 @@
     <div class="">
 	    <div>
 			<h3>{{dmode}} <div *ngIf="modal">(выбор)</div></h3>
-			<h4 *ngIf="parent && parent.dmode && parent.d"><a [routerLink]="['/l', parent.mode]">{{parent.dmode}}</a>: <a [routerLink]="['/l', parent.mode, parent.id]">{{parent.d}}</a></h4>
+			<h4 *ngIf="parent && parent.dmode && parent?.d"><a [routerLink]="['/l', parent.mode]">{{parent.dmode}}</a>: <a [routerLink]="['/l', parent.mode, parent.id]">{{parent?.d}}</a></h4>
 			<div *ngIf="!modal" >
 				<div class="btn-group">
 						<button type="button" class="btn btn-default btn-sm" [class.disabled]="!selectedItem" (click)="onView(selectedItem)">{{labels.View}}</button>
@@ -26,9 +26,9 @@
 						<button type="button" class="btn btn-default btn-sm" (click)="onAdd()">{{labels.Add}}</button>
 				</div>
 				
-				<dropdown-button *ngIf="!modal && dependencies && dependencies[0]" [caption]="'Перейти к …'" [menuitems]="dependencies" [selectedItem]="selectedItem" [parent]="{'id':selectedItem?.id, 'mode': mode, 'dmode': dmode, 'd': selectedItem.d}" [disabled]="!selectedItem">
+				<dropdown-button *ngIf="!modal &&  dependencies && dependencies[0]" [caption]="'Перейти к …'" [menuitems]="dependencies" [selectedItem]="selectedItem" [parent]="{'id':selectedItem?.id, 'mode': mode, 'dmode': dmode, 'd': selectedItem?.d}" [disabled]="!selectedItem">
 				</dropdown-button>
-
+				
 				<div class="btn-group">
 					<div *ngFor="let action of actions">
 						<button *ngIf="action.name" type="button" class="btn btn-default btn-sm" [class.disabled]="action.progress && action.progress === 1" (click)="onAction(action)">{{action.name}}</button>
@@ -62,7 +62,7 @@
 						<div (click)="onSort(header, $event)">
 							<span>{{getOrder(header).sign}}</span>							
 							<span *ngIf="getOrder(header).count > 1"><sup>{{getOrder(header).seq}}</sup></span> 
-						{{header.d}} 
+						{{header?.d}} 
 						</div>
 						<div class="seekfield">
 							<input [(ngModel)]="header.filter" />
@@ -78,7 +78,7 @@
 							<div *ngIf="!h.references && h.type !== 'numeric' && h.type !== 'timestamp with time zone'" > {{item[h.name]}}</div>
 							<div *ngIf="!h.references && h.type === 'numeric'" class="text-right"> {{item[h.name] | number:'1.2-2'}}</div>
 							<div *ngIf="!h.references && h.type === 'timestamp with time zone'" class="text-right"> {{item[h.name] | tstz }}</div>
-							<a *ngIf="h && h.references && item && item[h.name] && item[h.name] !== null" (click)="onDetail(h, item[h.name].id)" [routerLink]="['/l', h.references.table, item[h.name].id]"> {{item[h.name].d}} </a>
+							<a *ngIf="h && h.references && item && item[h.name] && item[h.name] !== null" (click)="onDetail(h, item[h.name].id)" [routerLink]="['/l', h.references.table, item[h.name].id]"> {{item[h.name]?.d}} </a>
 						</div>
 					</td>
 				</tr>

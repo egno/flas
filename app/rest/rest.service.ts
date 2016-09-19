@@ -122,11 +122,12 @@ export class RestService {
 
   getHeaders (path: string, url?: string): Promise<any> {
     let headers = new Headers();
+    let parm: string = 'relation_describe?relname=eq.'+path;
     if (this.token) {
       headers.append('Authorization',`Bearer ${this.token}`);
     }
     url = (url) ? url : this.configUrl;
-    return this.http.request(url+path, {method: 'Options', headers: headers})
+    return this.http.request(url+parm, {headers: headers})
                     .toPromise()
                     .then(this.extractData)
                     .catch(this.handleError);
@@ -221,6 +222,7 @@ export class RestService {
          resultSet.end = 0;
        }
      };
+    console.log(res);
     resultSet.data = res.json();
 //    console.log(resultSet);
     return resultSet;

@@ -39,11 +39,6 @@
  */
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-//import {HTTP_PROVIDERS} from '@angular/http';
-//import { APP_ROUTER_PROVIDERS } from './app/app.routes';
-
-import { AppModule }              from './app/app.module';
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-.catch(err => console.error(err));
+import { AppModule } from './app/app.module';
+const platform = platformBrowserDynamic();
+platform.bootstrapModule(AppModule);
