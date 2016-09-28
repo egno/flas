@@ -85,6 +85,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   parent_id: string;
   dependencies: any[];
   dependenciesTable: string = 'constraint_relations';
+  rpcParent:string = 'parent';
 
 	constructor(
 	    private route: ActivatedRoute,
@@ -99,16 +100,17 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       this.parent.mode = params['parent_mode']; 
       this.parent.dmode = params['parent_dmode']; 
       this.parent.d = params['parent_d']; 
-      if (this.where) {
-        this.parent.id = this.where.substring(this.where.search('=')+4, this.where.length); 
-        this.parent.field = this.where.substring(0,this.where.search('='));
-      }
       if (this.imode) {
         this.modal = 'modal';
         this.mode = this.imode;
       } else {
         this.modal = '';
-	   	  this.mode = params['mode']; 
+         this.mode = params['mode']; 
+      }
+      if (this.where) {
+        this.parent.id = this.where.substring(this.where.search('=')+4, this.where.length); 
+        this.parent.field = this.where.substring(0,this.where.search('='));
+        this.getParent(this.parent.field, this.parent.id);
       }
       delete this.dependencies;
       this.order = [{}];
@@ -192,6 +194,11 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
   onSort(header: any, event:any) {
     let v: any = {};
     v.name = header.name;
+    if (header.references) {
+       v.order_name = header.references.table+'_'+v.name;
+    } else {
+       v.order_name = v.name;
+    };
     v.desc = this.order.reduce((r, i) => r || (i.name===v.name && !i.desc), false);
     if (!event.ctrlKey) {
       this.order = [{}];
@@ -275,7 +282,7 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
       this.page = (this.page > this.pages)? this.pages : this.page;
       restParams.page = this.page;
       restParams.count = this.count;
-      restParams.order = this.order.filter(i => i.name).map(i => `${i.name}` + ((i.desc) ? '.desc' : '')).join(',');
+      restParams.order = this.order.filter(i => i.order_name).map(i => `${i.order_name}` + ((i.desc) ? '.desc' : '')).join(',');
       restParams.order = restParams.order || defaultOrder;
       restParams.select = this.select.toString();
       restParams.where = this.where;
@@ -356,6 +363,16 @@ export class ListpageComponent implements OnInit, AfterContentInit, OnDestroy {
               }
               )
           )
+  }
+
+  getParent(mode: string, id: string) {
+    let restParams: any = {};
+    restParams.table = this.mode;
+    restParams.field = mode;
+    restParams.id = id;
+    this.restService.rpc(this.rpcParent, restParams)
+      .then(p => console.log(p)
+           )
   }
 
 }

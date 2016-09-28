@@ -91,13 +91,15 @@ export class AppNav implements OnInit, OnDestroy {
   }
 
   updateMenuFromRest(d: any[]){
-    d.map( 
-        item => { 
-            if (item.caption) {
-               this.menu.push(item);
-             } ;
-        }
-    );
+    if (d) {
+      d.map( 
+          item => { 
+              if (item.caption) {
+                 this.menu.push(item);
+               } ;
+          }
+      );
+    }
   }
 }
 

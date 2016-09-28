@@ -58,7 +58,7 @@ export class NavigationService {
       restParams.order = 'code';
       restParams.where = 'code=isnot.null'
         return this.restService.get(this.path, restParams)
-          .then(d=>this.extractData(d.data));
+          .then(d =>this.extractData(d.data));
     }
 
   private extractData(res: any[]) {

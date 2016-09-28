@@ -73,7 +73,7 @@ export class RestService {
       this.token = '';
       localStorage.setItem('token',this.token); 
       this.isLoggedInSubjectSource.next('--logout');   
-      console.log(this.isLoggedIn$);
+      //console.log(this.isLoggedIn$);
   }
 
   checkIsLoggedIn() {
@@ -213,7 +213,8 @@ export class RestService {
     let resultSet: any = {};
     resultSet.totals = res.headers.get('Content-Range');
     if (resultSet.totals) {
-       resultSet.total = +resultSet.totals.match(/[\d]+$/)[0];
+      console.log(resultSet.totals)
+       resultSet.total = 0//+resultSet.totals.match(/[\d]+$/)[0];
        if (resultSet.total !== 0) {
          resultSet.start = +resultSet.totals.match(/^[^-]+/)[0];
          resultSet.end = +resultSet.totals.match(/(?:-)([\d]+)/)[1];
