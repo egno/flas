@@ -14,16 +14,8 @@
 	</ul>
 </div>
 <div>
-	<h4>Server settings</h4>
 	<div *ngIf="errorMessage">
 		<div>No connection to server</div>
 		<div>{{errorMessage}}</div>
 	</div>
-	<ul>
-		  <li *ngFor="let item of settings">
-		    <span>
-		      <span>{{item.d}}:</span> {{item.value}}
-		    </span>
-		  </li>
-	</ul>
 </div>
