@@ -40,13 +40,14 @@
 import { Component, OnInit } from '@angular/core';
 
 import { RestService }     from '../rest/rest.service';
+import { ConfigService }  from '../config/config.service';
 
 import appGlobals = require('../globals');
 
 @Component({
   selector: 'my-test',
   templateUrl: 'app/test/test.component.html',
-  providers: [RestService],
+  providers: [RestService,ConfigService],
 })
 
 export class TestComponent implements OnInit {
@@ -54,10 +55,13 @@ export class TestComponent implements OnInit {
   settings: Array<any> = [{}];
   errorMessage: any;
 
-  constructor(private restService: RestService) { }
+  constructor(private restService: RestService,
+      private configService: ConfigService) { }
 
     ngOnInit() {
     	this.get('settings');
+      this.configService.readFile('./package.json')
+                 .subscribe(res => console.log(res));
     }
 
     onSave(name: string){

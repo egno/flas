@@ -1,6 +1,6 @@
 {
-  "name": "flap",
-  "version": "0.0.3",
+  "name": "flas",
+  "version": "0.0.4",
   "description": "FLAP client",
   "scripts": {
     "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",

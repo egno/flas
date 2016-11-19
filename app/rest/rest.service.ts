@@ -214,7 +214,7 @@ export class RestService {
     resultSet.totals = res.headers.get('Content-Range');
     if (resultSet.totals) {
       console.log(resultSet.totals)
-       resultSet.total = 0//+resultSet.totals.match(/[\d]+$/)[0];
+       resultSet.total = +resultSet.totals.match(/[\d]+$/)[0];
        if (resultSet.total !== 0) {
          resultSet.start = +resultSet.totals.match(/^[^-]+/)[0];
          resultSet.end = +resultSet.totals.match(/(?:-)([\d]+)/)[1];

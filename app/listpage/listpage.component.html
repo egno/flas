@@ -46,7 +46,9 @@
 				<button type="button" class="btn btn-default btn-xs" [class.disabled]="page <= 1" (click)="onFirst()"> << </button> 
 				<button type="button" class="btn btn-default btn-xs" [class.disabled]="page <= 1" (click)="onPrev(page)"> < </button> 
 			</div>
+			<span>
 				{{start}}-{{end}}/{{total}} {{page}}/{{pages}} <input [(ngModel)]="count"/>
+			</span>
 			<div class="btn-group"> 
 				<button type="button" class="btn btn-default btn-xs" [class.disabled]="page >= pages" (click)="onNext(page)"> > </button>
 				<button type="button" class="btn btn-default btn-xs" [class.disabled]="page >= pages" (click)="onLast()"> >> </button>
