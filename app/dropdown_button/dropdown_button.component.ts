@@ -57,10 +57,10 @@ import { Router, ActivatedRoute }       from '@angular/router';
             '/l', 
             item.path, 
             {
-                'where': item.fld + '=eq.'+ selectedItem.id, 
+                'where': item.fld + '=eq.'+ selectedItem?.id, 
                 'parent_mode': parent.mode, 
                 'parent_dmode': parent.dmode, 
-                'parent_d': selectedItem.d
+                'parent_d': selectedItem?.d
              }]">{{item.d}}</a>
       </li>
     </ul>
